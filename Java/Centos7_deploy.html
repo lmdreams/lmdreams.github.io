@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="夏天的风" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOs7部署JAVA程序">
+<meta property="og:url" content="http://bolg.lmdream.cn/Java/Centos7_deploy.html">
+<meta property="og:site_name" content="夏天的风">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bolg.lmdream.cn/coverimg/hexo_03.jpg">
+<meta property="og:image" content="http://bolg.lmdream.cn/coverimg/deploy00.jpg">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/deploy/deploy01.jpg">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/deploy/deploy02.jpg">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/deploy/deploy03.jpg">
+<meta property="og:updated_time" content="2024-08-05T08:08:07.568Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOs7部署JAVA程序">
+<meta name="twitter:image" content="http://bolg.lmdream.cn/coverimg/hexo_03.jpg">
+
+<!-- 快速接入 DaoVoice -->
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bolg.lmdream.cn/Java/Centos7_deploy.html">
+
+
+
+
+
+  <title>CentOs7部署JAVA程序 | 夏天的风</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  
+
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">夏天的风</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夏天的风</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-record">
+          <a href="/record/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            生活
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tool">
+          <a href="/tool/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-recycle"></i> <br>
+            
+            工具
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bolg.lmdream.cn/Java/Centos7_deploy.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏天的风">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏天的风">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CentOs7部署JAVA程序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-20T21:15:24+08:00">
+                2019-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Centos7/" itemprop="url" rel="index">
+                    <span itemprop="name">Centos7</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+
+
+      
+        <br>
+<a id="more"></a>
+
+<blockquote>
+<p>一直都是在Windows系统上部署JAVA的程序,还未曾在Linux上部署过JAVA程序,就想尝试一次，由于是第一次部署，想记录一下全过程，所以文章有些冗长<br>有些详细操作过程需要读者自己去参照相关文档，有些文档链接也会给出<br>会尽量减少文字描述，提炼经典的内容，部署过程也是通过网络查询，文章内会给出参考的连接，如有不对的地方还望指正，准备好了咱就开始吧</p>
+</blockquote>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>我选择的是CentOs7系统，这个测试过程是虚拟机上进行的,为了节省篇幅,如何在VMware安装CentosOS7系统的安装可以参考这篇文章<a href="https://blog.csdn.net/q2158798/article/details/80550626" target="_blank" rel="noopener">VMware安装最新版CentOS7图文教程</a></p>
+<h1 id="Centos7安装宝塔面板"><a href="#Centos7安装宝塔面板" class="headerlink" title="Centos7安装宝塔面板"></a>Centos7安装宝塔面板</h1><p><a href="https://www.bt.cn/bbs/portal.php" target="_blank" rel="noopener">宝塔Linux官网</a><br>使用Xshell 6连接CentOs7系统，连接成功后进行以下操作<br>Linux面板6.0安装命令(暂时仅兼容Centos7.x，其它系统版本请安装5.9稳定版)</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y wget &amp;&amp; wget -O <span class="keyword">install</span>.sh http://download.bt.cn/<span class="keyword">install</span>/install_6.<span class="number">0</span>.sh &amp;&amp; bash <span class="keyword">install</span>.sh</span><br></pre></td></tr></table></figure>
+
+<p>Linux面板6.0升级专业版:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http:<span class="regexp">//</span>download.bt.cn<span class="regexp">/install/u</span>pdate6.sh|bash</span><br></pre></td></tr></table></figure>
+
+<p>稍等一会，等待升级<br>初次访问需要安装nginx时间可能会久一点。<br>在页面中会出现访问地址、账户和密码，<code>如何选择的是阿里云或者腾讯云服务器的话需要去云服务器中，在防火墙中将8888端口加入到规则中，否则会出现无法访问</code>。<br>将网址复制到浏览器中进行登录，登录成功后，选择Nginx的部署方案，静静等待部署。<br><img src="/coverimg/hexo_03.jpg" alt="hexo_03.jpg"><br>部署完成后如下图<br><img src="/coverimg/deploy00.jpg" alt="deploy00.jpg"><br>至此宝塔面板已经配置完成。</p>
+<h1 id="卸载自带的jdk-安装jdk8"><a href="#卸载自带的jdk-安装jdk8" class="headerlink" title="卸载自带的jdk 安装jdk8"></a>卸载自带的jdk 安装jdk8</h1><p><warning>以下步骤通过在Xshell工具进行操作完成</warning><br> Centos7默认安装的openjdk，而平时使用的是Oracle的JDK，所以就需要将原来自带的JDK卸载。</p>
+<h2 id="查看系统是否带有JDK"><a href="#查看系统是否带有JDK" class="headerlink" title="查看系统是否带有JDK"></a>查看系统是否带有JDK</h2> <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -<span class="built_in">version</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="卸载已安装的JDK"><a href="#卸载已安装的JDK" class="headerlink" title="卸载已安装的JDK"></a>卸载已安装的JDK</h2> <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">rpm</span> <span class="selector-tag">-e</span> <span class="selector-tag">--nodeps</span> <span class="selector-tag">java-1</span><span class="selector-class">.8</span><span class="selector-class">.0-openjdk-1</span><span class="selector-class">.8</span><span class="selector-class">.0</span><span class="selector-class">.131-11</span><span class="selector-class">.b12</span><span class="selector-class">.el7</span><span class="selector-class">.x86_64</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">rpm</span> <span class="selector-tag">-e</span> <span class="selector-tag">--nodeps</span> <span class="selector-tag">java-1</span><span class="selector-class">.7</span><span class="selector-class">.0-openjdk-1</span><span class="selector-class">.7</span><span class="selector-class">.0</span><span class="selector-class">.141-2</span><span class="selector-class">.6</span><span class="selector-class">.10</span><span class="selector-class">.5</span><span class="selector-class">.el7</span><span class="selector-class">.x86_64</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">rpm</span> <span class="selector-tag">-e</span> <span class="selector-tag">--nodeps</span> <span class="selector-tag">java-1</span><span class="selector-class">.8</span><span class="selector-class">.0-openjdk-headless-1</span><span class="selector-class">.8</span><span class="selector-class">.0</span><span class="selector-class">.131-11</span><span class="selector-class">.b12</span><span class="selector-class">.el7</span><span class="selector-class">.x86_64</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">rpm</span> <span class="selector-tag">-e</span> <span class="selector-tag">--nodeps</span> <span class="selector-tag">java-1</span><span class="selector-class">.7</span><span class="selector-class">.0-openjdk-headless-1</span><span class="selector-class">.8</span><span class="selector-class">.0</span><span class="selector-class">.131-11</span><span class="selector-class">.b12</span><span class="selector-class">.el7</span><span class="selector-class">.x86_64</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="验证一下是还有jdk"><a href="#验证一下是还有jdk" class="headerlink" title="验证一下是还有jdk"></a>验证一下是还有jdk</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -<span class="keyword">qa</span>|<span class="keyword">grep</span> java</span><br><span class="line"></span><br><span class="line">java -<span class="keyword">version</span></span><br></pre></td></tr></table></figure>
+
+<p>没有内容证明已经卸载干净了</p>
+<h2 id="安装Oracle的JDK"><a href="#安装Oracle的JDK" class="headerlink" title="安装Oracle的JDK"></a>安装Oracle的JDK</h2><p>Oracle官网下载JDK<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">下载地址</a><br><code>登录宝塔面板,在usr文件夹底下创建目录java文件夹，将下载的JDK上传到java文件夹中，然后进行解压。
+解压完成后进行环境的配置。打开etc文件夹中的&quot;profile&quot;文件，进行环境变量的配置</code>(此步骤是通过宝塔面板中操作完成)</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=<span class="regexp">/usr/java</span><span class="regexp">/jdk1.8.0_60</span></span><br><span class="line"><span class="regexp">export CLASSPATH=.:$JAVA_HOME/jre</span><span class="regexp">/lib/rt</span>.<span class="symbol">jar:</span>$JAVA_HOME/<span class="class"><span class="keyword">lib</span>/<span class="title">dt</span>.<span class="title">jar</span>:$<span class="title">JAVA_HOME</span>/<span class="title">lib</span>/<span class="title">tools</span>.<span class="title">jar</span></span></span><br><span class="line">export PATH=$<span class="symbol">PATH:</span>$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+
+<p><warning>(此步骤通过在Xshell工具进行操作完成)</warning><br>以上内容放到profile文件最后面<br>让配置好的环境变量生效</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+
+<p><warning>(此步骤通过在Xshell工具进行操作完成)</warning><br>生效成功好输入  java -version  验证环境变量配置是否成功。</p>
+<h1 id="Centos7安装MySQL"><a href="#Centos7安装MySQL" class="headerlink" title="Centos7安装MySQL"></a>Centos7安装MySQL</h1><p>MySQL的安装推荐使用宝塔面板工具进行安装<br>宝塔面板登录成功后，点击软件商店，寻找MySQL数据库，进行安装<br>稍等片刻后会MySQL就安装成功了，还有一种方式是通过命令进行安装,<a href="https://blog.csdn.net/qq_36582604/article/details/80526287" target="_blank" rel="noopener">CentOS7安装MySQL</a>，<br>MySQL安装完成后的密码是随机的，必须修改密码之后才能操作数据库，点击宝塔面板的数据库进行密码的修改,密码修改完成后为了操作方便，选择使用navicat进行链接,就需要开启MySQL的远程访问。<br>使用命令进入数据库</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attribute">mysql -uroot -p</span></span><br></pre></td></tr></table></figure>
+
+<p>开启远程访问限制（注意：下面IP地址指定链接的IP，如要开启所有的，用%代替IP）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> *.* <span class="keyword">to</span> <span class="string">'root'</span>@<span class="string">'IP地址'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'数据库密码'</span> <span class="keyword">with</span> <span class="keyword">grant</span> <span class="keyword">option</span>;</span><br></pre></td></tr></table></figure>
+
+<p>生效</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span><br></pre></td></tr></table></figure>
+
+<p>退出</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+
+<p><code>远程访问开启后,需要开启3306的端口才会链接成功,点击宝塔面板中的安全，查看防火墙一栏中3306端口是否出去放行状态,如果是则不用执行以下命令，反之使用命令开放33006端口</code></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=3306/tcp --permanent</span><br></pre></td></tr></table></figure>
+
+<p>重新载入</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --reload</span></span><br></pre></td></tr></table></figure>
+
+<p>☝<warning>(以上骤通过在Xshell工具进行操作完成)</warning><br>以上工作做完后，通过navicat进行链接就行了</p>
+<h1 id="运行SpringBoot项目部署"><a href="#运行SpringBoot项目部署" class="headerlink" title="运行SpringBoot项目部署"></a>运行SpringBoot项目部署</h1><p>CentOS7上可以运行war包和jar包,此处只写jar包的部署方式<br><code>在/www/web/目录底下新建&quot;java&quot;文件夹，将打包好的项目进行上传,我选择存放在&quot;/www/web/java&quot;下</code>&gt;&gt;&gt;&gt;&gt;&gt;(此步骤是在宝塔面板中操作完成)<br>通过宝塔面板进入到服务文件目录</p>
+<p><code>路径:/etc/systemd/system/</code><br>新建一个文件 xxx.service, xxx建议设置为你项目的名称。<br>我新建的文件为 im.service<br>新建成功后进行编辑添加内容</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span>  </span><br><span class="line"><span class="attr">Description</span>=im.service </span><br><span class="line"><span class="attr">After</span>=syslog.target</span><br><span class="line"><span class="section">[Service]</span>  </span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/java/jdk1.<span class="number">8.0</span>_60/bin/java -jar /www/web/java/im.jar </span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStop</span>=/bin/kill -<span class="number">15</span> <span class="variable">$MAINPID</span>   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span>  </span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>需要修改的部分为Description和ExecStart<br>Description 为开启服务的名称<br>ExecStart的前一部分代表jdk的安装的bin目录 ,后一部分代表你的jar包存放的位置,其他的固定<br>设置完成后还需要开启相关的端口</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=8080/tcp --permanent</span><br></pre></td></tr></table></figure>
+
+<p>重启生效</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --reload</span></span><br></pre></td></tr></table></figure>
+
+<p>以下命令为项目的开启<br>注册为开机启动</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> im</span><br></pre></td></tr></table></figure>
+
+<p>开启项目</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> im</span><br></pre></td></tr></table></figure>
+
+<p>查看项目启动的状态</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">systemctl status im</span></span><br></pre></td></tr></table></figure>
+
+<p>查看项目的日志</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">journalctl </span>-u im <span class="keyword">or </span><span class="keyword">journalctl </span>-u im.service</span><br></pre></td></tr></table></figure>
+
+<p>停止项目</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="keyword">stop</span> <span class="keyword">im</span></span><br></pre></td></tr></table></figure>
+
+<p>取消开机启动的service</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="builtin-name">disable</span> im</span><br></pre></td></tr></table></figure>
+
+<h1 id="域名映射IP地址和端口"><a href="#域名映射IP地址和端口" class="headerlink" title="域名映射IP地址和端口"></a>域名映射IP地址和端口</h1><p> 服务部署成功后，项目通过IP地址和端口可以进行访问，但是正式部署的时候是不会讲IP和断开暴露出来，都是通过域名进行访问的，但是如果项目的端口非80端口的话，就需要使用反向代理来进行解决了。<br> 推荐使用Nginx,以下是我自己域名映射IP和端口的过程<br> 使用的是宝塔控制面板,<br> 步骤为:点击网站&gt;&gt;&gt;进行站点的添加&gt;&gt;&gt;值填写域名、备注、根目录&gt;&gt;&gt;其中根目录选择jar包所在的路径,进行创建。<br> 创建完成后,点击创建的网站名称，打开后如图<br><img src="/blog/deploy/deploy01.jpg" alt><br> 点击配置文件主要修改server_name、root，这两个后面的值<br> <img src="/blog/deploy/deploy02.jpg" alt><br> server_name:域名，可以为多个<br> root:jar运行包所在的文件夹路径<br> 修改完成后点击保存<br> 随后点击反向代理进行添加，填写代理名称和目标的URl(目标的URl:指的是服务器的IP地址+端口),其他的不用修改，点击保存。<br> <img src="/blog/deploy/deploy03.jpg" alt><br> 以上内容填写完成后，重启Nginx后就可以了。</p>
+
+      
+    </div>
+
+    <!-- 增加相关推荐 -->
+     
+          
+
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\Java\Flow_code.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;流水单号的生产</a></div>
+      
+    </div>
+  
+  </ul>
+  <style type="text/css">
+    a:hover{
+      text-decoration: none;
+    }
+  </style>
+
+
+
+
+
+      
+
+    
+    
+    
+
+      <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+        
+      </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/SpringBoot/springboot_annotation.html" rel="next" title="Spring boot常用注解">
+                <i class="fa fa-chevron-left"></i> Spring boot常用注解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Java/Flow_code.html" rel="prev" title="流水单号的生产">
+                流水单号的生产 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="夏天的风">
+            
+              <p class="site-author-name" itemprop="name">夏天的风</p>
+              <p class="site-description motion-element" itemprop="description">夏天的风</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://bolg.lmdream.cn" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Centos7安装宝塔面板"><span class="nav-number">2.</span> <span class="nav-text">Centos7安装宝塔面板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卸载自带的jdk-安装jdk8"><span class="nav-number">3.</span> <span class="nav-text">卸载自带的jdk 安装jdk8</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看系统是否带有JDK"><span class="nav-number">3.1.</span> <span class="nav-text">查看系统是否带有JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载已安装的JDK"><span class="nav-number">3.2.</span> <span class="nav-text">卸载已安装的JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证一下是还有jdk"><span class="nav-number">3.3.</span> <span class="nav-text">验证一下是还有jdk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Oracle的JDK"><span class="nav-number">3.4.</span> <span class="nav-text">安装Oracle的JDK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Centos7安装MySQL"><span class="nav-number">4.</span> <span class="nav-text">Centos7安装MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行SpringBoot项目部署"><span class="nav-number">5.</span> <span class="nav-text">运行SpringBoot项目部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#域名映射IP地址和端口"><span class="nav-number">6.</span> <span class="nav-text">域名映射IP地址和端口</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+      <!-- 此处为密码查看的代码 -->
+       <script src="/js/src/jquery-3.1.1.js"></script>
+
+<script>
+    //暂时储存文章中的内容
+    var div = $('.post-body');
+    //暂时储存目录的内容
+    //var toc=$('.post-toc-wrap');
+    var toc=$('.nav');
+
+    function password() {
+        if(''){
+            //将文章内容删除
+            div.remove();
+            //将目录删除
+            toc.remove();
+            //将文章删除后，向原来文章的地方添加，应该出现的提示用户输入密码的样式
+            //下面这里的第一个用textarea是因为如果在手机端的时候只能显示一部分文字，
+            //只是拓展:input里面的字只能显示一行，不会自动换行，目前上网搜索没有发现好的办法，所以用了textarea，右下角的小三角通过resize:none 去掉。
+            $('.post-header').after(
+            '<span class="description" value="请输入密码，然后按 Enter 键阅读" style="font-style: oblique;font-weight: bold;border: none;display: block;'+
+            'width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none ">'+
+            '请输入密码，然后按 Enter 键阅读' +
+            '</span>' +
+            '<div class="qiang" style="height: 100px;width: 60%;margin:0 auto">' +
+            '<input class="password"  type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;' +
+            'margin: 0 auto;outline: none;width:95%"/>' +
+            '</div>')
+            //绑定点击事件，如果是点击的.password 这个div就改变样式，如果是document中除了div之外的其他任何元素，就变回原来的样式。
+            document.onclick = function (event) {
+                var e = event || window.event;
+                var elem = e.srcElement || e.target;
+
+                while (elem) {
+                    if (elem != document) {
+                        if (elem.className == "password") {
+                            //$(".password").animate({paddingTop:"30px",width:"100%",borderWidth:"2px"},300)
+                            return;
+                        }
+                        elem = elem.parentNode;
+                    } else {
+                        //$(".password").animate({paddingTop:"0px",width:"95%",borderWidth:"1px"},300)
+                        return;
+                    }
+                }
+            }
+            //绑定enter键按下后离开的事件
+            $(document).keyup(function(event){
+                if(event.keyCode ==13&&$('.password').length>0){
+                    //console.log($('.password').val())
+                    //console.log('')
+                    if ($('.password').val() == '') {
+                        //恢复文章内容
+                        (div).appendTo($(".post-header"))
+                        //恢复目录
+                        toc.appendTo($(".sidebar-inner"))
+                        //删除本页面的输入密码组件
+                        $(".description").remove();
+                        $(".qiang").remove();
+                        $(".password").remove();
+
+                        //重新处理pjax事件,如果没有加pjax的从下面这行起到下面的else之间的代码需要去掉。
+                        //图片懒加载，没有加入此功能的这个函数需要去掉
+
+                        //pjax后出现文章不显示，没有pjax的下面四行需要去掉
+                        $(".post-block").css({opacity:1});
+                        $(".post-header").css({opacity:1});
+                        $(".post-body").css({opacity:1});
+                        $(".pagination").css({opacity:1});
+                    }else {
+                        alert("对不起，密码输入错误。")
+                    }
+                }
+                //将document的keyup移除，防止在pjax的情况下会重复绑定事件
+            });
+        }
+    }
+    password();
+</script>
+
+
+<script>
+function loadPhotos(e) {
+        if ($("#tagType").val(e), 3 === e)
+            $(".description").remove(),
+                $(".qiang").remove(),
+                $(".ownPhotoPassword").remove(),
+                $(".babyPhotoPassword").remove(),
+                checkPassword(e);
+        else {
+            var o = function(e) {
+                var o = document.createElement("script");
+                document.getElementsByTagName("body")[0].appendChild(o), o.setAttribute("src", e)
+            };
+            setTimeout(function() {
+                o("./ins.js")
+            }, 0)
+        }
+    }
+    function checkPassword(e) {
+            if ("123" == $("#babyPhotoPassword").val()) {
+                var t = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                return void setTimeout(function() {
+                    t("./ins.js")
+                }, 0)
+            }
+            div3.remove(), $("#-3").append('<span class="description" value="请输入密码，然后按 Enter 键欣赏" style="font-style: oblique;font-weight: bold;border: none;display: block;width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none "><i class="fa fa-heartbeat" id="myheartbeat"></i> 请输入密码，然后按 Enter 键欣赏  <i class="fa fa-heartbeat" id="myheartbeat"></i></span><div class="qiang" style="height: 100px;width: 60%;margin:0 auto"><input class="babyPhotoPassword" id="111" onkeydown="keyup_submit(event);" type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;margin: 0 auto;outline: none;width:95%"/></div>')
+        setTimeout("$('.ownPhotoPassword').focus()", 100), setTimeout("$('.babyPhotoPassword').focus()", 100)
+    }
+    function keyup_submit(e) {
+        var t = window.event || e;
+        if (13 == t.keyCode && $(".ownPhotoPassword").length > 0)
+            if ("123" == $(".ownPhotoPassword").val()) {
+                $("#ownPhotoPassword").val($(".ownPhotoPassword").val()), $("#-2").append(div2), $(".description").remove(), $(".qiang").remove(), $(".ownPhotoPassword").remove();
+                var o = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                setTimeout(function() {
+                    o("./ins.js")
+                }, 0)
+            } else alert("对不起，密码输入错误。");
+        if (13 == t.keyCode && $(".babyPhotoPassword").length > 0)
+            if ("123" == $(".babyPhotoPassword").val()) {
+                $("#babyPhotoPassword").val($(".babyPhotoPassword").val()), $("#-3").append(div3), $(".description").remove(), $(".qiang").remove(), $(".babyPhotoPassword").remove();
+                var o = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                setTimeout(function() {
+                    o("./ins.js")
+                }, 0)
+            } else alert("对不起，密码输入错误。")
+    }
+    var div2 = $(".instagram2");
+    var div3 = $(".instagram3");
+</script>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">夏天的风</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">博客全站共&#58;</span>
+    
+    <span title="博客全站共">51k 字</span>
+  
+</div>
+
+
+
+
+
+
+
+
+<!--
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共51k字</span>
+</div>
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
+-->
+
+
+<div class="BbeiAn-info">
+   	陕ICP备 -
+    <a target="_blank" href="http://www.beian.miit.gov.cn" rel="nofollow">陕ICP备19017959号</a> <!-- a标签中增加nofollow属性，避免爬虫出站。-->|
+
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  <!--崩溃欺骗-->
+  <script type="text/javascript" src="/js/src/collapse.js"></script>
+
+
+
+
+</body>
+</html>
