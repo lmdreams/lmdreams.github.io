@@ -133,16 +133,19 @@
 
 
 
+<meta name="description" content="&amp;lt;/br&amp;gt;">
 <meta name="keywords" content="Spring Boot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot配置文件详解">
 <meta property="og:url" content="http://bolg.lmdream.cn/SpringBoot/springboot_configuration.html">
 <meta property="og:site_name" content="夏天的风">
+<meta property="og:description" content="&amp;lt;/br&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/configure/configure01.jpg">
-<meta property="og:updated_time" content="2024-08-05T08:08:07.588Z">
+<meta property="og:updated_time" content="2024-08-07T07:59:49.609Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot配置文件详解">
+<meta name="twitter:description" content="&amp;lt;/br&amp;gt;">
 <meta name="twitter:image" content="http://bolg.lmdream.cn/blog/configure/configure01.jpg">
 
 <!-- 快速接入 DaoVoice -->
@@ -395,8 +398,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-03T13:30:24+08:00">
-                2019-10-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T13:30:24+08:00">
+                2019-12-03
               </time>
             
 
@@ -486,8 +489,7 @@
 
 
       
-        <br>
-<a id="more"></a>
+        <pre><code>&lt;/br&gt;</code></pre><a id="more"></a>
 
 <h1 id="SpringBoot文件的配置"><a href="#SpringBoot文件的配置" class="headerlink" title="SpringBoot文件的配置"></a>SpringBoot文件的配置</h1><!-- more -->
 <h2 id="默认配置"><a href="#默认配置" class="headerlink" title="默认配置"></a>默认配置</h2><p>SpringBoot有两种全局配置文件,可以对一些默认的配置进行修改，如数据库连接、日志设置、以及自定义属性的配置。</p>
@@ -529,7 +531,13 @@
 <p>   通过@Autowired注解获得配置文件的类属性<br>     @Autowired<br>       CustomPropertiesConfig customPropertiesConfig;<br>       获得配置文件中的值customPropertiesConfig.getName()；</p>
 <h3 id="Value"><a href="#Value" class="headerlink" title="@Value"></a>@Value</h3>   <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 通过<span class="doctag">@Value</span>获取自定义的值</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Component</span></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomPropertiesValueConfig</span> </span>&#123;</span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * 姓名</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="meta">@Value(<span class="meta-string">"<span class="subst">$&#123;com.name&#125;</span>"</span>)</span></span><br><span class="line">      <span class="keyword">private</span>  String name;</span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * 自定义</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="meta">@Value(<span class="meta-string">"<span class="subst">$&#123;com.descriptive&#125;</span>"</span>)</span></span><br><span class="line">      <span class="keyword">private</span>  String descriptive;</span><br><span class="line">      省略<span class="keyword">get</span>/<span class="keyword">set</span></span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
 
-<p>   通过@Autowired注解获得配置文件的类属性@Autowired<br>   CustomPropertiesValueConfig customPropertiesValueConfig;<br>   customPropertiesValueConfig.getName()；<br>   <div class="note warning"><p>如果所声明的类是一个组件,则需要在实体类上需要加上@Component<br>如果需要使用表达式只有@Value才可以,@Value(“#{2*2}) 结果为:4</p></div><br>   <strong>使用场景</strong><br>   <div class="note info no-icon"><p>只是在某个业务逻辑中需要获取一下配置文件中的某项值，使用@Value；<br>编写了一个javaBean来和配置文件进行映射，使用@ConfigurationProperties；</p></div></p>
+<p>   通过@Autowired注解获得配置文件的类属性@Autowired<br>   CustomPropertiesValueConfig customPropertiesValueConfig;<br>   customPropertiesValueConfig.getName()；<br>   {% note warning %}
+   如果所声明的类是一个组件,则需要在实体类上需要加上@Component
+   如果需要使用表达式只有@Value才可以,@Value("#{2*2}) 结果为:4
+   {% endnote %}<br>   <strong>使用场景</strong><br>   {% note info no-icon %}
+   只是在某个业务逻辑中需要获取一下配置文件中的某项值，使用@Value；
+   编写了一个javaBean来和配置文件进行映射，使用@ConfigurationProperties；
+   {% endnote %}</p>
 <h2 id="加载外部配置文件"><a href="#加载外部配置文件" class="headerlink" title="加载外部配置文件"></a>加载外部配置文件</h2><p> 如果将所有的配置信息全部写到一个配置文件中的话,如果配置东西过多,不便于维护，可以进行拆分，拆分到多个文件中，然后通过引用进行使用</p>
 <ol>
 <li>@PropertySource(value={“classpath:文件名称.properties”})</li>
@@ -547,7 +555,9 @@
 </blockquote>
 <h3 id="Configuration和-Bean方式"><a href="#Configuration和-Bean方式" class="headerlink" title="@Configuration和@Bean方式"></a>@Configuration和@Bean方式</h3>   <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 配置类</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">@Configuration<span class="comment">//指定这是一个配置类，用于替代之前的配置文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AppConfig</span> &#123;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">//将方法的返回值添加到容器中，容器中组件的id就是方法的返回值</span></span><br><span class="line">    @Bean</span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyService <span class="title">myService</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"配置类@Bean给容器中添加组件了..."</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MyService();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-   <div class="note warning"><p>使用第三种方式的时候需要在主函数程序类中注释掉@ImportResource</p></div>
+   {% note warning %}
+     使用第三种方式的时候需要在主函数程序类中注释掉@ImportResource
+   {% endnote %}
 <h2 id="多环境切换"><a href="#多环境切换" class="headerlink" title="多环境切换"></a>多环境切换</h2><p>   在项目开发中会遇到多个环境的切换,如开发环境、生成环境、测试环境,在主配置文件中通过<br>     <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">spring:</span></span><br><span class="line"><span class="symbol">  profiles:</span></span><br><span class="line"><span class="symbol">    active:</span> dev <span class="meta">#指定读取的文件</span></span><br></pre></td></tr></table></figure></p>
 <pre><code>1. application.yml 主配置文件
 2. application-dev.yml 开发环境
@@ -620,6 +630,20 @@
     <div class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_resubmit.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot防止重复提交</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_rateLimiter.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot限流</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="\SpringBoot\springboot_dynamic.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot+Mybatis动态多数据源切换</a></div>
       
     </div>
@@ -675,8 +699,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Law/labour_law.html" rel="next" title="中华人民共和国劳动法">
-                <i class="fa fa-chevron-left"></i> 中华人民共和国劳动法
+              <a href="/IM/Im_SingleChat.html" rel="next" title="即时通讯-单聊(四)">
+                <i class="fa fa-chevron-left"></i> 即时通讯-单聊(四)
               </a>
             
           </div>
@@ -762,7 +786,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -773,7 +797,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -784,7 +808,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1013,7 +1037,7 @@ function loadPhotos(e) {
     
       <span class="post-meta-item-text">博客全站共&#58;</span>
     
-    <span title="博客全站共">51k 字</span>
+    <span title="博客全站共">37.1k 字</span>
   
 </div>
 
@@ -1027,7 +1051,7 @@ function loadPhotos(e) {
 <!--
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共51k字</span>
+  <span class="post-count">博客全站共37.1k字</span>
 </div>
 	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
 -->

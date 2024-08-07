@@ -120,7 +120,7 @@
 
 
 
-  <meta name="keywords" content="mysql,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -133,15 +133,17 @@
 
 
 
-<meta name="keywords" content="mysql">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MySQL使用">
-<meta property="og:url" content="http://bolg.lmdream.cn/Mysql/Mysql.html">
+<meta name="description" content="夏天的风">
+<meta name="keywords" content="夏天的风">
+<meta property="og:type" content="website">
+<meta property="og:title" content="夏天的风">
+<meta property="og:url" content="http://bolg.lmdream.cn/categories/Oracle/index.html">
 <meta property="og:site_name" content="夏天的风">
+<meta property="og:description" content="夏天的风">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2024-08-05T08:04:37.396Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL使用">
+<meta name="twitter:title" content="夏天的风">
+<meta name="twitter:description" content="夏天的风">
 
 <!-- 快速接入 DaoVoice -->
 
@@ -176,13 +178,13 @@
 
 
 
-  <link rel="canonical" href="http://bolg.lmdream.cn/Mysql/Mysql.html">
+  <link rel="canonical" href="http://bolg.lmdream.cn/categories/Oracle/">
 
 
 
 
 
-  <title>MySQL使用 | 夏天的风</title>
+  <title>分类: Oracle | 夏天的风</title>
   
 
 
@@ -204,7 +206,7 @@
   
 
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -350,251 +352,79 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
-
-  
-
   
   
   
+  <div class="post-block category">
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bolg.lmdream.cn/Mysql/Mysql.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏天的风">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏天的风">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">MySQL使用</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-04T13:25:24+08:00">
-                2019-11-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  379
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-
-
-      
-        <br>
-<a id="more"></a>
-
-<p> 记录MySQL使用过程中的问题以及解决方法</p>
-<h1 id="Mysql的varchar的排序"><a href="#Mysql的varchar的排序" class="headerlink" title="Mysql的varchar的排序"></a>Mysql的varchar的排序</h1><p> 有时候需要对varchar类型进行排序,则会失效,因为没有对varchar类型进行排序的操作,需要进行类型的转换即转换为int类型如下:<br> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">	*</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	<span class="keyword">table</span> </span><br><span class="line">	</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> (code+<span class="number">0</span>) <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure></p>
-<p>也可以使用Mysql的类型转换函数:CAST、CONVERT,函数可用来获取一个类型的值，并产生另一个类型的值。 </p>
-<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CAST(<span class="built_in">value</span> as <span class="built_in">type</span>);  </span><br><span class="line"><span class="built_in">CONVERT</span>(<span class="built_in">value</span>, <span class="built_in">type</span>); </span><br><span class="line"></span><br><span class="line">SELECT</span><br><span class="line">	*</span><br><span class="line">FROM</span><br><span class="line">	table </span><br><span class="line">	</span><br><span class="line"><span class="built_in">CONVERT</span> (<span class="built_in">code</span>, SIGNED) DESC</span><br></pre></td></tr></table></figure>
-
-<p>这两函数的转换的类型是有限制的,可以使用以下值的其中一个</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">二进制，同带binary前缀的效果 : <span class="type">BINARY</span>    </span><br><span class="line">字符型，可带参数 : <span class="type">CHAR</span>()     </span><br><span class="line">日期 : <span class="type">DATE</span>     </span><br><span class="line">时间: TIME     </span><br><span class="line">日期时间型 : <span class="type">DATETIME</span>     </span><br><span class="line">浮点数 : <span class="type">DECIMAL</span>      </span><br><span class="line">整数 : <span class="type">SIGNED</span>     </span><br><span class="line">无符号整数 : <span class="type">UNSIGNED</span></span><br></pre></td></tr></table></figure>
-
-
-<h1 id="mybatis中传入String类型参数的问题"><a href="#mybatis中传入String类型参数的问题" class="headerlink" title="mybatis中传入String类型参数的问题"></a>mybatis中传入String类型参数的问题</h1><p> 按照名称去查询,传入的是一个String类型的参数,查询的时候回出现错误</p>
-<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">There <span class="keyword">is</span> no getter <span class="keyword">for</span> <span class="keyword">property</span> named <span class="symbol">'name</span>' <span class="keyword">in</span> <span class="symbol">'class</span> java.lang.<span class="built_in">String</span>'。</span><br></pre></td></tr></table></figure>
-
-<p>原始的代码展示:</p>
-<p>Dao层为</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"><span class="markdown">/**</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">     * </span>根据名称查询</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">     * </span>@param name</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">     * </span>@return</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="code">     */</span></span></span></span><br><span class="line"><span class="built_in">String</span> getName(<span class="built_in">String</span> name);</span><br></pre></td></tr></table></figure>
-
-<p>Xml层</p>
-<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">select</span> id=<span class="string">"getName"</span>  resultType=<span class="string">"String"</span>&gt;</span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    *</span><br><span class="line">    <span class="keyword">FROM</span> table a</span><br><span class="line">    <span class="keyword">where</span> a.name = <span class="meta">#&#123;name&#125;</span></span><br><span class="line">&lt;/<span class="keyword">select</span>&gt;</span><br></pre></td></tr></table></figure>
-
-<p>错误原因:MyBatis不能解析String类型的参数,<br>解决的方法:在Dao层中给方法的参数添加@Param注解<br>修改后的Dao层</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据名称查询</span></span><br><span class="line"><span class="comment">     * @param name</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="selector-tag">String</span> <span class="selector-tag">getName</span>(<span class="variable">@Param</span>(<span class="string">"name"</span>)String name);</span><br></pre></td></tr></table></figure>
-
-<p>注意的是@Param(“name”)的参数必须和xml的参数要一致</p>
-
-      
-    </div>
-
-    <!-- 增加相关推荐 -->
-     
-          
-
-
-
-
-
-      
-
-    
-    
-    
-
-      <div>
-        
-          <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
-    
-</div>
-
-        
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>Oracle<small>分类</small>
+        </h1>
       </div>
 
-    
+      
+        
 
-    
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-    
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/Database/oracle_memory_target.html" itemprop="url">
+              
+                <span itemprop="name">Oracle初始化参数之memory_target</span>
+              
+            </a>
+        
+      </h2>
 
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
-          
-        </div>
-      
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2021-11-07T22:25:24+08:00" content="2021-11-07">
+          11-07
+        </time>
+      </div>
 
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/Java/Flow_code.html" rel="next" title="流水单号的生产">
-                <i class="fa fa-chevron-left"></i> 流水单号的生产
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/IM/Im_Server.html" rel="prev" title="即时通讯-服务端搭建(一)">
-                即时通讯-服务端搭建(一) <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
+      
+        
 
-    <div class="post-spread">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/Database/oracle.html" itemprop="url">
+              
+                <span itemprop="name">Oracle之memory_target、memory_max_target、sga_target、sga_max_size学习</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2021-11-06T22:25:24+08:00" content="2021-11-06">
+          11-06
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
       
     </div>
+
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -622,17 +452,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -649,7 +470,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -660,7 +481,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -671,7 +492,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -715,22 +536,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mysql的varchar的排序"><span class="nav-number">1.</span> <span class="nav-text">Mysql的varchar的排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mybatis中传入String类型参数的问题"><span class="nav-number">2.</span> <span class="nav-text">mybatis中传入String类型参数的问题</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -900,7 +705,7 @@ function loadPhotos(e) {
     
       <span class="post-meta-item-text">博客全站共&#58;</span>
     
-    <span title="博客全站共">51k 字</span>
+    <span title="博客全站共">37.1k 字</span>
   
 </div>
 
@@ -914,7 +719,7 @@ function loadPhotos(e) {
 <!--
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共51k字</span>
+  <span class="post-count">博客全站共37.1k字</span>
 </div>
 	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
 -->
@@ -1016,14 +821,6 @@ function loadPhotos(e) {
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
-
-
 
   
 

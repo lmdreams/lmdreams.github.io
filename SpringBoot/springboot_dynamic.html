@@ -144,7 +144,7 @@
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/Application.png">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/image-application.png">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/Service.png">
-<meta property="og:updated_time" content="2024-08-05T08:08:07.531Z">
+<meta property="og:updated_time" content="2024-08-07T07:59:49.615Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring boot+Mybatis动态多数据源切换">
 <meta name="twitter:image" content="http://bolg.lmdream.cn/blog/java/DataSource1.png">
@@ -399,8 +399,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-04T22:30:24+08:00">
-                2019-10-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T22:30:24+08:00">
+                2019-12-04
               </time>
             
 
@@ -492,9 +492,8 @@
       
          <br>
 <a id="more"></a>
-# 前言
 
-<p>记录自己开发过程的解决方法和实现思路:<br>最近由于关系的原因需要使用多数据源切换进行不同数据库的数据展示和操作，所以进行了研究，并记录整个过程<br>我所使用的是Mysql5.7版本Spring boot版本为2.1.6。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录自己开发过程的解决方法和实现思路:<br>最近由于关系的原因需要使用多数据源切换进行不同数据库的数据展示和操作，所以进行了研究，并记录整个过程<br>我所使用的是Mysql5.7版本Spring boot版本为2.1.6。</p>
 <h1 id="实现的原理："><a href="#实现的原理：" class="headerlink" title="实现的原理："></a>实现的原理：</h1><p>使用注解标识要使用的数据源，然后继承AbstractRoutingDataSource再利用AOP在执行方法前切换数据源，数据源是使用的spring提供的多数据源类<del>（org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource）</del></p>
 <hr>
 <h2 id="对多数据源实现的核心类AbstractRoutingDataSource部分内容解析"><a href="#对多数据源实现的核心类AbstractRoutingDataSource部分内容解析" class="headerlink" title="对多数据源实现的核心类AbstractRoutingDataSource部分内容解析"></a>对多数据源实现的核心类AbstractRoutingDataSource部分内容解析</h2><p><img src="/blog/java/DataSource1.png" alt="DataSource1.png"><br><img src="/blog/java/DataSource2.png" alt="DataSource2.png"></p>
@@ -593,6 +592,20 @@
       
     </div>
   
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_resubmit.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot防止重复提交</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_rateLimiter.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot限流</a></div>
+      
+    </div>
+  
   </ul>
   <style type="text/css">
     a:hover{
@@ -654,8 +667,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/SpringBoot/springboot_annotation.html" rel="prev" title="Spring boot常用注解">
-                Spring boot常用注解 <i class="fa fa-chevron-right"></i>
+              <a href="/SpringBoot/springboot_shiro.html" rel="prev" title="Springboot+shiro无权限跳转失败">
+                Springboot+shiro无权限跳转失败 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -731,7 +744,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -742,7 +755,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -753,7 +766,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -807,7 +820,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现的原理："><span class="nav-number">1.</span> <span class="nav-text">实现的原理：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对多数据源实现的核心类AbstractRoutingDataSource部分内容解析"><span class="nav-number">1.1.</span> <span class="nav-text">对多数据源实现的核心类AbstractRoutingDataSource部分内容解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录结构如图所示"><span class="nav-number">1.2.</span> <span class="nav-text">目录结构如图所示:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要类的说明："><span class="nav-number">2.</span> <span class="nav-text">主要类的说明：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动项目之前需要将自带的数据源进行排除"><span class="nav-number">2.1.</span> <span class="nav-text">启动项目之前需要将自带的数据源进行排除:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库配置文件-application-yml"><span class="nav-number">2.2.</span> <span class="nav-text">数据库配置文件:application.yml</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体的代码如下："><span class="nav-number">3.</span> <span class="nav-text">具体的代码如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源注解类-DataSource-java"><span class="nav-number">3.1.</span> <span class="nav-text">数据源注解类:DataSource.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源AOP类-DataSourceAspect-java"><span class="nav-number">3.2.</span> <span class="nav-text">数据源AOP类:DataSourceAspect.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源Bean配置-DataSourceBean-java"><span class="nav-number">3.3.</span> <span class="nav-text">数据源Bean配置:DataSourceBean.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库配置类-DataSourceConfig-java"><span class="nav-number">3.4.</span> <span class="nav-text">数据库配置类:DataSourceConfig.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源工具-DataSourceUtil-java"><span class="nav-number">3.5.</span> <span class="nav-text">数据源工具:DataSourceUtil.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多数据源类型-DataSourceType-java"><span class="nav-number">3.6.</span> <span class="nav-text">多数据源类型:DataSourceType.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现AOP动态切换-DynamicDataSource-java"><span class="nav-number">3.7.</span> <span class="nav-text">实现AOP动态切换:DynamicDataSource.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义上下文数据源-JdbcContextHolder-java"><span class="nav-number">3.8.</span> <span class="nav-text">定义上下文数据源:JdbcContextHolder.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">4.1.</span> <span class="nav-text">思考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现的原理："><span class="nav-number">2.</span> <span class="nav-text">实现的原理：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对多数据源实现的核心类AbstractRoutingDataSource部分内容解析"><span class="nav-number">2.1.</span> <span class="nav-text">对多数据源实现的核心类AbstractRoutingDataSource部分内容解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录结构如图所示"><span class="nav-number">2.2.</span> <span class="nav-text">目录结构如图所示:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要类的说明："><span class="nav-number">3.</span> <span class="nav-text">主要类的说明：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动项目之前需要将自带的数据源进行排除"><span class="nav-number">3.1.</span> <span class="nav-text">启动项目之前需要将自带的数据源进行排除:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库配置文件-application-yml"><span class="nav-number">3.2.</span> <span class="nav-text">数据库配置文件:application.yml</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体的代码如下："><span class="nav-number">4.</span> <span class="nav-text">具体的代码如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源注解类-DataSource-java"><span class="nav-number">4.1.</span> <span class="nav-text">数据源注解类:DataSource.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源AOP类-DataSourceAspect-java"><span class="nav-number">4.2.</span> <span class="nav-text">数据源AOP类:DataSourceAspect.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源Bean配置-DataSourceBean-java"><span class="nav-number">4.3.</span> <span class="nav-text">数据源Bean配置:DataSourceBean.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库配置类-DataSourceConfig-java"><span class="nav-number">4.4.</span> <span class="nav-text">数据库配置类:DataSourceConfig.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源工具-DataSourceUtil-java"><span class="nav-number">4.5.</span> <span class="nav-text">数据源工具:DataSourceUtil.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多数据源类型-DataSourceType-java"><span class="nav-number">4.6.</span> <span class="nav-text">多数据源类型:DataSourceType.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现AOP动态切换-DynamicDataSource-java"><span class="nav-number">4.7.</span> <span class="nav-text">实现AOP动态切换:DynamicDataSource.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义上下文数据源-JdbcContextHolder-java"><span class="nav-number">4.8.</span> <span class="nav-text">定义上下文数据源:JdbcContextHolder.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">5.1.</span> <span class="nav-text">思考</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -982,7 +995,7 @@ function loadPhotos(e) {
     
       <span class="post-meta-item-text">博客全站共&#58;</span>
     
-    <span title="博客全站共">51k 字</span>
+    <span title="博客全站共">37.1k 字</span>
   
 </div>
 
@@ -996,7 +1009,7 @@ function loadPhotos(e) {
 <!--
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共51k字</span>
+  <span class="post-count">博客全站共37.1k字</span>
 </div>
 	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
 -->
