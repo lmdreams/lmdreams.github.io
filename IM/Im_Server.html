@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="IM,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="夏天的风" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="keywords" content="IM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="即时通讯-服务端搭建(一)">
+<meta property="og:url" content="http://bolg.lmdream.cn/IM/Im_Server.html">
+<meta property="og:site_name" content="夏天的风">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/im/t-io(01).jpg">
+<meta property="og:updated_time" content="2024-08-05T08:08:07.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="即时通讯-服务端搭建(一)">
+<meta name="twitter:image" content="http://bolg.lmdream.cn/blog/im/t-io(01).jpg">
+
+<!-- 快速接入 DaoVoice -->
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bolg.lmdream.cn/IM/Im_Server.html">
+
+
+
+
+
+  <title>即时通讯-服务端搭建(一) | 夏天的风</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  
+
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">夏天的风</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夏天的风</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-record">
+          <a href="/record/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            生活
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tool">
+          <a href="/tool/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-recycle"></i> <br>
+            
+            工具
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bolg.lmdream.cn/IM/Im_Server.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏天的风">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏天的风">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">即时通讯-服务端搭建(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-09T18:25:24+08:00">
+                2019-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IM/" itemprop="url" rel="index">
+                    <span itemprop="name">IM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  13 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+
+
+      
+         <br>
+<a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1> <div class="note info"><p>之前在做技术积累的时候基于Layim+t-io做了一个即时通讯，由于某种原因，就搁置了，最近抽空将其完善，此系列记录开发过程。</p></div>
+<h1 id="关于t-io"><a href="#关于t-io" class="headerlink" title="关于t-io"></a>关于t-io</h1><p> 在开始之前建议对于t-io不熟悉的可以去官网看看<a href="https://www.t-io.org/?qm=1" target="_blank" rel="noopener">t-io</a> 网络上对于t-io的解析的文章很多，可以看看,<a href="https://gitee.com/cctvmfc/t-io" target="_blank" rel="noopener">t-io的源码地址</a></p>
+<h1 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h1><p> 　　操作系统：Windows 10 X64<br> 　　开发工具：IntelliJ IDEA ULTIMATE 2018.3<br> 　　JDK:1.8.0_131<br> 　　t-io：3.5.7.v20191115-RELEASE<br> 　　数据库：MySQL5.7 </p>
+<h1 id="服务端搭建"><a href="#服务端搭建" class="headerlink" title="服务端搭建"></a>服务端搭建</h1><p> 在服务搭建之前建议先去网络上对以下几个类进行了解</p>
+<ol>
+<li><p>IWsMsgHandler(websocket事件监听器)</p>
+</li>
+<li><p>ServerAioHandler(消息的处理)</p>
+</li>
+<li><p>WsServerAioListener(事件监听)</p>
+</li>
+<li><p>WsServerConfig(服务端的配置)</p>
+</li>
+<li><p>ServerTioConfig(当前的上下文)</p>
+</li>
+<li><p>TioServer(Tio服务)</p>
+<p>本篇文章不会对于t-io进行过多的分析，尽量减少文字的描述，大部分使用代码进行呈现,需要详细的了解t-io的话可以去它的<a href="https://www.t-io.org/?qm=1" target="_blank" rel="noopener">官网</a>进行了解</p>
+<h1 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h1><h2 id="引入t-io的包"><a href="#引入t-io的包" class="headerlink" title="引入t-io的包"></a>引入t-io的包</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.t-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tio-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.7.v20191115-RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.t-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tio-websocket-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.7.v20191115-RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="ServerSocketStarter-java"><a href="#ServerSocketStarter-java" class="headerlink" title="ServerSocketStarter.java"></a>ServerSocketStarter.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 服务端启动</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lm</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerSocketStarter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> WebSocketProperties webSocketProperties;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> WsStarter <span class="title">serverStarter</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        WesServerConfig wesServerConfig = <span class="keyword">new</span> WesServerConfig(webSocketProperties.getPort());</span><br><span class="line">        wesServerConfig.setBindIp(webSocketProperties.getIp());</span><br><span class="line">        WsStarter wsStarter=<span class="keyword">new</span> WsStarter(wesServerConfig,<span class="keyword">new</span> WesMsgHandler());</span><br><span class="line">        <span class="comment">//启动程序</span></span><br><span class="line">        wsStarter.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> wsStarter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WesServerConfig-java"><a href="#WesServerConfig-java" class="headerlink" title="WesServerConfig.java"></a>WesServerConfig.java</h2><p>继承org.tio.websocket.server.WsServerConfig</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">WesServerConfig</span> <span class="keyword">extends</span> <span class="title">WsServerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public <span class="type">WesServerConfig</span>(<span class="type">Integer</span> bindPort, boolean useSession) &#123;</span><br><span class="line">        <span class="keyword">super</span>(bindPort, useSession);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public <span class="type">WesServerConfig</span>(<span class="type">Integer</span> bindPort) &#123;</span><br><span class="line">        <span class="keyword">super</span>(bindPort);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WsStarter-java"><a href="#WsStarter-java" class="headerlink" title="WsStarter.java"></a>WsStarter.java</h2><p>源码地址:org.tio.websocket.server.WsServerStarter</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 改造原来的启动配置</span></span><br><span class="line"><span class="comment"> * 原来的位置:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WsStarter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> static Logger log = LoggerFactory.getLogger(WsServerStarter.<span class="keyword">class</span>);</span><br><span class="line">    <span class="comment">//服务端 ip和端口的配置</span></span><br><span class="line">    <span class="keyword">private</span> WesServerConfig wesServerConfig;</span><br><span class="line">    <span class="comment">//定义handler，所有的请求数据全部都由这个handler来处理,decode/encode/handler等等</span></span><br><span class="line">    <span class="keyword">private</span> WesMsgHandler wesMsgHandler;</span><br><span class="line">    <span class="comment">//服务端的消息处理 所有的请求数据全部都由这个handler来处理,decode/encode/handler等等</span></span><br><span class="line">    <span class="keyword">private</span> WesServerAioHandler wesServerAioHandler;</span><br><span class="line">    <span class="comment">//可以在连接上、接收到消息、发送消息后等等回调其内部方法</span></span><br><span class="line">    <span class="keyword">private</span> WesServerAioListener wesServerAioListener;</span><br><span class="line">    <span class="comment">//服务端上下文初始化</span></span><br><span class="line">    <span class="keyword">private</span> ServerTioConfig serverTioConfig;</span><br><span class="line">    <span class="keyword">private</span> TioServer tioServer;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TioServer getTioServer() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.tioServer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WesServerConfig getWesServerConfig() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.wesServerConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WesMsgHandler getWesMsgHandler() &#123;</span><br><span class="line">        <span class="keyword">return</span> wesMsgHandler;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> void setWesMsgHandler(WesMsgHandler wesMsgHandler) &#123;</span><br><span class="line">        <span class="keyword">this</span>.wesMsgHandler = wesMsgHandler;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WesServerAioHandler getWesServerAioHandler() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.wesServerAioHandler;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WesServerAioListener getWesServerAioListener() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.wesServerAioListener;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> ServerTioConfig getServerTioConfig() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.serverTioConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WsStarter(WesServerConfig wesServerConfig, WesMsgHandler wesMsgHandler) throws IOException &#123;</span><br><span class="line">        <span class="keyword">this</span>(wesServerConfig, wesMsgHandler, (SynThreadPoolExecutor)<span class="literal">null</span>, (ThreadPoolExecutor)<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WsStarter(WesServerConfig wesServerConfig, WesMsgHandler wesMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException &#123;</span><br><span class="line">        <span class="keyword">this</span>(wesServerConfig, wesMsgHandler, new WsTioUuid(), tioExecutor, groupExecutor);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WsStarter(WesServerConfig wesServerConfig, WesMsgHandler wesMsgHandler, TioUuid tioUuid, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException &#123;</span><br><span class="line">        <span class="keyword">this</span>.wesServerConfig = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.wesMsgHandler = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.wesServerAioHandler = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.wesServerAioListener = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.serverTioConfig = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.tioServer = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (tioExecutor == <span class="literal">null</span>) &#123;</span><br><span class="line">            tioExecutor = Threads.getTioExecutor();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (groupExecutor == <span class="literal">null</span>) &#123;</span><br><span class="line">            groupExecutor = Threads.getGroupExecutor();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.wesServerConfig = wesServerConfig;</span><br><span class="line">        <span class="keyword">this</span>.wesMsgHandler = wesMsgHandler;</span><br><span class="line">        wesServerAioHandler = new WesServerAioHandler(wesServerConfig, wesMsgHandler);</span><br><span class="line">        wesServerAioListener = new WesServerAioListener();</span><br><span class="line">        serverTioConfig = new ServerTioConfig(<span class="string">"Tio Websocket Server"</span>, <span class="keyword">this</span>.wesServerAioHandler, <span class="keyword">this</span>.wesServerAioListener, tioExecutor, groupExecutor);</span><br><span class="line">        serverTioConfig.setHeartbeatTimeout(<span class="number">0L</span>);</span><br><span class="line">        serverTioConfig.setTioUuid(tioUuid);</span><br><span class="line">        serverTioConfig.setReadBufferSize(<span class="number">30720</span>);</span><br><span class="line">        tioServer = new TioServer(<span class="keyword">this</span>.serverTioConfig);</span><br><span class="line">        WebMsgHandler.<span class="keyword">init</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> void start() throws IOException &#123;</span><br><span class="line">        tioServer.start(<span class="keyword">this</span>.wesServerConfig.getBindIp(), <span class="keyword">this</span>.wesServerConfig.getBindPort());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WesMsgHandler-java"><a href="#WesMsgHandler-java" class="headerlink" title="WesMsgHandler.java"></a>WesMsgHandler.java</h2><p>实现:org.tio.websocket.server.handler.IWsMsgHandler</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  websocket事件的监听</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WesMsgHandler</span> <span class="keyword">implements</span> <span class="title">IWsMsgHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MineService mineService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> FriendOrGroupService friendOrGroupService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(WesMsgHandler.class);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 握手时走这个方法，业务可以在这里获取cookie，request参数等</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">HttpResponse <span class="title">handshake</span><span class="params">(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> <span class="title">handshakeUser</span><span class="params">(httpRequest,httpResponse,channelContext)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onAfterHandshaked</span><span class="params">(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">Object <span class="title">onBytes</span><span class="params">(WsRequest wsRequest, <span class="keyword">byte</span>[] bytes, ChannelContext channelContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"暂不支持字节消息解析"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 离线or关闭</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> wsRequest</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> bytes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> channelContext</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">Object <span class="title">onClose</span><span class="params">(WsRequest wsRequest, <span class="keyword">byte</span>[] bytes, ChannelContext channelContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Tio.remove(channelContext,<span class="string">"onClose"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">Object <span class="title">onText</span><span class="params">(WsRequest wsRequest, String s, ChannelContext channelContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="function">MineService <span class="title">getMineService</span><span class="params">()</span></span>&#123;</span><br><span class="line">        mineService= SpringContextUtil.getBean(MineService.class);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> mineService;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function">FriendOrGroupService <span class="title">getFriendOrGroupService</span><span class="params">()</span></span>&#123;</span><br><span class="line">        friendOrGroupService= SpringContextUtil.getBean(FriendOrGroupService.class);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> friendOrGroupService;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 握手成功后的处理</span></span><br><span class="line"><span class="comment">     * 将用户信息绑定到当前的上下文channelContext中</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function">HttpResponse <span class="title">handshakeUser</span><span class="params">( HttpRequest httpRequest,HttpResponse httpResponse, ChannelContext channelContext)</span> <span class="keyword">throws</span>  Exception </span>&#123;</span><br><span class="line">        MineService mineService = getMineService();</span><br><span class="line">        FriendOrGroupService friendOrGroupService = getFriendOrGroupService();</span><br><span class="line">        <span class="comment">//获得缓存</span></span><br><span class="line">        String userid=UserUtils.getImid();</span><br><span class="line">        <span class="comment">//根据登录人的id获取当前登录人的信息</span></span><br><span class="line">        Mine mine= mineService.get(userid);</span><br><span class="line">        <span class="comment">//将当前登录人的信息保存到layim需要的格式里面</span></span><br><span class="line">        String userId = mine.getId();</span><br><span class="line">        channelContext.setAttribute(userId, mine);</span><br><span class="line">        <span class="comment">//绑定用户ID</span></span><br><span class="line">        Tio.bindUser(channelContext, userId);</span><br><span class="line">        <span class="comment">//清除缓存</span></span><br><span class="line">        UserUtils.removeImid();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> httpResponse;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WesServerAioHandler-java"><a href="#WesServerAioHandler-java" class="headerlink" title="WesServerAioHandler.java"></a>WesServerAioHandler.java</h2><p>实现:org.tio.core.intf.AioHandler.ServerAioHandler</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  消息处理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> class WesServerAioHandler implements ServerAioHandler &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger <span class="built_in">log</span> = LoggerFactory.getLogger(WsServerAioHandler.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> WesServerConfig wesServerConfig;</span><br><span class="line">    <span class="keyword">private</span> WesMsgHandler wesMsgHandler;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WesServerAioHandler(WesServerConfig wesServerConfig, WesMsgHandler wesMsgHandler) &#123;</span><br><span class="line">        <span class="keyword">this</span>.wesServerConfig = wesServerConfig;</span><br><span class="line">        <span class="keyword">this</span>.wesMsgHandler = wesMsgHandler;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/***</span></span><br><span class="line"><span class="comment">     *服务端消息解码</span></span><br><span class="line"><span class="comment">     * 将消息的返回值进行封装</span></span><br><span class="line"><span class="comment">     * @param buffer</span></span><br><span class="line"><span class="comment">     * @param limit</span></span><br><span class="line"><span class="comment">     * @param position</span></span><br><span class="line"><span class="comment">     * @param readableLength</span></span><br><span class="line"><span class="comment">     * @param channelContext</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     * @throws AioDecodeException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> WsRequest decode(ByteBuffer buffer, <span class="built_in">int</span> limit, <span class="built_in">int</span> position, <span class="built_in">int</span> readableLength, ChannelContext channelContext) <span class="keyword">throws</span> AioDecodeException &#123;</span><br><span class="line">        WsSessionContext wsSessionContext = (WsSessionContext)channelContext.getAttribute();</span><br><span class="line">        <span class="keyword">if</span> (!wsSessionContext.isHandshaked()) &#123;</span><br><span class="line">            HttpRequest request = HttpRequestDecoder.decode(buffer, limit, position, readableLength, channelContext, wesServerConfig);</span><br><span class="line">            <span class="keyword">if</span> (request == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                HttpResponse httpResponse = updateWebSocketProtocol(request, channelContext);</span><br><span class="line">                <span class="keyword">if</span> (httpResponse == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> AioDecodeException(<span class="string">"http协议升级到websocket协议失败"</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    wsSessionContext.setHandshakeRequest(request);</span><br><span class="line">                    wsSessionContext.setHandshakeResponse(httpResponse);</span><br><span class="line">                    WsRequest wsRequestPacket = <span class="keyword">new</span> WsRequest();</span><br><span class="line">                    wsRequestPacket.setHandShake(<span class="keyword">true</span>);</span><br><span class="line">                    <span class="built_in">log</span>.info(<span class="string">"握手成功"</span>);</span><br><span class="line">                    <span class="keyword">return</span> wsRequestPacket;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            WsRequest websocketPacket = WsServerDecoder.decode(buffer, channelContext);</span><br><span class="line">            <span class="keyword">return</span> websocketPacket;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 编码：把业务消息包编码为可以发送的ByteBuffer</span></span><br><span class="line"><span class="comment">     * 总的消息结构：消息头 + 消息体</span></span><br><span class="line"><span class="comment">     * 消息头结构：    4个字节，存储消息体的长度</span></span><br><span class="line"><span class="comment">     * 消息体结构：   对象的json串的byte[]</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> ByteBuffer encode(Packet packet, TioConfig tioConfig, ChannelContext channelContext) &#123;</span><br><span class="line">        WsResponse wsResponse = (WsResponse)packet;</span><br><span class="line">        <span class="keyword">if</span> (wsResponse.isHandShake()) &#123;</span><br><span class="line">            WsSessionContext imSessionContext = (WsSessionContext)channelContext.getAttribute();</span><br><span class="line">            HttpResponse handshakeResponse = imSessionContext.getHandshakeResponse();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> HttpResponseEncoder.encode(handshakeResponse, tioConfig, channelContext);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (UnsupportedEncodingException var8) &#123;</span><br><span class="line">                <span class="built_in">log</span>.error(var8.toString(), var8);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ByteBuffer byteBuffer = WsServerEncoder.encode(wsResponse, tioConfig, channelContext);</span><br><span class="line">            <span class="keyword">return</span> byteBuffer;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> WsServerConfig getHttpConfig() &#123;</span><br><span class="line">        <span class="keyword">return</span> wesServerConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 进行消息的处理以及转发</span></span><br><span class="line"><span class="comment">     * @param websocketPacket</span></span><br><span class="line"><span class="comment">     * @param bytes</span></span><br><span class="line"><span class="comment">     * @param opcode</span></span><br><span class="line"><span class="comment">     * @param channelContext</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     * @throws Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> WsResponse handler(WsRequest websocketPacket, <span class="built_in">byte</span>[] bytes, Opcode opcode, ChannelContext channelContext) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        WsResponse wsResponse = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (opcode == Opcode.TEXT) &#123;</span><br><span class="line">            <span class="keyword">if</span> (bytes != <span class="keyword">null</span> &amp;&amp; bytes.length != <span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//接收到的消息包</span></span><br><span class="line">                <span class="keyword">String</span> <span class="built_in">text</span> = <span class="keyword">new</span> <span class="keyword">String</span>(bytes, wesServerConfig.getCharset());</span><br><span class="line">                <span class="keyword">JSONObject</span> jsonObject = JSON.parseObject(<span class="built_in">text</span>);</span><br><span class="line">                <span class="comment">//获得消息类型</span></span><br><span class="line">                MsgType property = Json.toBean(<span class="built_in">text</span>, MsgType.class);</span><br><span class="line">                <span class="comment">//解析数据消息</span></span><br><span class="line">                <span class="built_in">log</span>.info(<span class="string">"消息类型"</span>,property.getMsgtype());</span><br><span class="line">                MsgHandler msgHandler = WebMsgHandler.getMsg(property.getMsgtype());</span><br><span class="line">                <span class="built_in">boolean</span> unknown = msgHandler == <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">if</span>(!unknown) &#123;</span><br><span class="line">                    <span class="comment">//根据消息类型进行消息的处理</span></span><br><span class="line">                    msgHandler.handler(websocketPacket, channelContext);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">Object</span> retObj = wesMsgHandler.onText(websocketPacket, <span class="built_in">text</span>, channelContext);</span><br><span class="line">                <span class="keyword">String</span> methodName = <span class="string">"onText"</span>;</span><br><span class="line">                wsResponse = <span class="keyword">this</span>.processRetObj(retObj, methodName, channelContext);</span><br><span class="line">                <span class="keyword">return</span> wsResponse;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Tio.remove(channelContext, <span class="string">"错误的websocket包，body为空"</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">Object</span> retObj;</span><br><span class="line">            <span class="keyword">String</span> methodName;</span><br><span class="line">            <span class="keyword">if</span> (opcode == Opcode.BINARY) &#123;</span><br><span class="line">                <span class="keyword">if</span> (bytes != <span class="keyword">null</span> &amp;&amp; bytes.length != <span class="number">0</span>) &#123;</span><br><span class="line">                    retObj = wesMsgHandler.onBytes(websocketPacket, bytes, channelContext);</span><br><span class="line">                    methodName = <span class="string">"onBytes"</span>;</span><br><span class="line">                    wsResponse = <span class="keyword">this</span>.processRetObj(retObj, methodName, channelContext);</span><br><span class="line">                    <span class="keyword">return</span> wsResponse;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    Tio.remove(channelContext, <span class="string">"错误的websocket包，body为空"</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (opcode != Opcode.PING &amp;&amp; opcode != Opcode.PONG) &#123;</span><br><span class="line">                <span class="keyword">if</span> (opcode == Opcode.CLOSE) &#123;</span><br><span class="line">                    <span class="keyword">String</span> <span class="built_in">text</span> = ByteUtil.toText(bytes);</span><br><span class="line">                    retObj = wesMsgHandler.onClose(websocketPacket, bytes, channelContext);</span><br><span class="line">                    methodName = <span class="string">"onClose"</span>;</span><br><span class="line">                    wsResponse = <span class="keyword">this</span>.processRetObj(retObj, methodName, channelContext);</span><br><span class="line">                    <span class="keyword">return</span> wsResponse;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    Tio.remove(channelContext, <span class="string">"错误的websocket包，错误的Opcode"</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">log</span>.info(<span class="string">"收到"</span> + opcode);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> handler(Packet packet, ChannelContext channelContext) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        WsRequest wsRequest = (WsRequest)packet;</span><br><span class="line">        <span class="keyword">if</span> (wsRequest.isHandShake()) &#123;</span><br><span class="line">            WsSessionContext wsSessionContext = (WsSessionContext)channelContext.getAttribute();</span><br><span class="line">            HttpRequest request = wsSessionContext.getHandshakeRequest();</span><br><span class="line">            HttpResponse httpResponse = wsSessionContext.getHandshakeResponse();</span><br><span class="line">            HttpResponse r = wesMsgHandler.handshake(request, httpResponse, channelContext);</span><br><span class="line">            <span class="keyword">if</span> (r == <span class="keyword">null</span>) &#123;</span><br><span class="line">                Tio.remove(channelContext, <span class="string">"业务层不同意握手"</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                wsSessionContext.setHandshakeResponse(r);</span><br><span class="line">                WsResponse wsResponse = <span class="keyword">new</span> WsResponse();</span><br><span class="line">                wsResponse.setHandShake(<span class="keyword">true</span>);</span><br><span class="line">                Tio.send(channelContext, wsResponse);</span><br><span class="line">                wsSessionContext.setHandshaked(<span class="keyword">true</span>);</span><br><span class="line">                wesMsgHandler.onAfterHandshaked(request, httpResponse, channelContext);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">log</span>.info(<span class="string">"进行消息的处理"</span>);</span><br><span class="line">            WsResponse wsResponse = <span class="keyword">this</span>.handler(wsRequest, wsRequest.getBody(), wsRequest.getWsOpcode(), channelContext);</span><br><span class="line">            <span class="keyword">if</span> (wsResponse != <span class="keyword">null</span>) &#123;</span><br><span class="line">                Tio.send(channelContext, wsResponse);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> WsResponse processRetObj(<span class="keyword">Object</span> obj, <span class="keyword">String</span> methodName, ChannelContext channelContext) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        WsResponse wsResponse = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (obj == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="keyword">String</span>) &#123;</span><br><span class="line">            <span class="keyword">String</span> <span class="built_in">str</span> = (<span class="keyword">String</span>)obj;</span><br><span class="line">            wsResponse = WsResponse.fromText(<span class="built_in">str</span>, wesServerConfig.getCharset());</span><br><span class="line">            <span class="keyword">return</span> wsResponse;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">byte</span>[]) &#123;</span><br><span class="line">            wsResponse = WsResponse.fromBytes((<span class="built_in">byte</span>[])((<span class="built_in">byte</span>[])obj));</span><br><span class="line">            <span class="keyword">return</span> wsResponse;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> WsResponse) &#123;</span><br><span class="line">            <span class="keyword">return</span> (WsResponse)obj;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> ByteBuffer) &#123;</span><br><span class="line">            <span class="built_in">byte</span>[] bs = ((ByteBuffer)obj).array();</span><br><span class="line">            wsResponse = WsResponse.fromBytes(bs);</span><br><span class="line">            <span class="keyword">return</span> wsResponse;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">log</span>.error(<span class="string">"&#123;&#125; &#123;&#125;.&#123;&#125;()方法，只允许返回byte[]、ByteBuffer、WsResponse或null，但是程序返回了&#123;&#125;"</span>, <span class="keyword">new</span> <span class="keyword">Object</span>[]&#123;channelContext, <span class="keyword">this</span>.getClass().getName(), methodName, obj.getClass().getName()&#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> setHttpConfig(WesServerConfig httpConfig) &#123;</span><br><span class="line">        wesServerConfig = httpConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> HttpResponse updateWebSocketProtocol(HttpRequest request, ChannelContext channelContext) &#123;</span><br><span class="line">        Map&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; headers = request.getHeaders();</span><br><span class="line">        <span class="keyword">String</span> Sec_WebSocket_Key = (<span class="keyword">String</span>)headers.<span class="built_in">get</span>(<span class="string">"sec-websocket-key"</span>);</span><br><span class="line">        <span class="keyword">if</span> (StrUtil.isNotBlank(Sec_WebSocket_Key)) &#123;</span><br><span class="line">            <span class="keyword">String</span> Sec_WebSocket_Key_Magic = Sec_WebSocket_Key + <span class="string">"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"</span>;</span><br><span class="line">            <span class="built_in">byte</span>[] key_array = SHA1Util.SHA1(Sec_WebSocket_Key_Magic);</span><br><span class="line">            <span class="keyword">String</span> acceptKey = BASE64Util.byteArrayToBase64(key_array);</span><br><span class="line">            HttpResponse httpResponse = <span class="keyword">new</span> HttpResponse(request);</span><br><span class="line">            httpResponse.setStatus(HttpResponseStatus.C101);</span><br><span class="line">            Map&lt;HeaderName, HeaderValue&gt; respHeaders = <span class="keyword">new</span> <span class="keyword">HashMap</span>();</span><br><span class="line">            respHeaders.put(HeaderName.Connection, HeaderValue.Connection.Upgrade);</span><br><span class="line">            respHeaders.put(HeaderName.Upgrade, HeaderValue.Upgrade.WebSocket);</span><br><span class="line">            respHeaders.put(HeaderName.Sec_WebSocket_Accept, HeaderValue.from(acceptKey));</span><br><span class="line">            httpResponse.addHeaders(respHeaders);</span><br><span class="line">            <span class="keyword">return</span> httpResponse;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WesServerAioListener-java"><a href="#WesServerAioListener-java" class="headerlink" title="WesServerAioListener.java"></a>WesServerAioListener.java</h2><p>继承:org.tio.websocket.server.WsServerAioListener</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 事件监听</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="keyword">public</span> class WesServerAioListener extends WsServerAioListener &#123;</span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">static</span> Logger <span class="built_in">log</span> = LoggerFactory.getLogger(WesServerAioListener.class);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> onAfterConnected(ChannelContext channelContext, <span class="built_in">boolean</span> isConnected, <span class="built_in">boolean</span> isReconnect) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">         <span class="keyword">super</span>.onAfterConnected(channelContext, isConnected, isReconnect);</span><br><span class="line">         <span class="keyword">if</span> (<span class="built_in">log</span>.isInfoEnabled()) &#123;</span><br><span class="line">             <span class="built_in">log</span>.info(<span class="string">"onAfterConnected\r\n&#123;&#125;"</span>, channelContext);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> onAfterSent(ChannelContext channelContext, Packet packet, <span class="built_in">boolean</span> isSentSuccess) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">         <span class="keyword">super</span>.onAfterSent(channelContext, packet, isSentSuccess);</span><br><span class="line">         <span class="keyword">if</span> (<span class="built_in">log</span>.isInfoEnabled()) &#123;</span><br><span class="line">             <span class="built_in">log</span>.info(<span class="string">"onAfterSent\r\n&#123;&#125;\r\n&#123;&#125;"</span>, packet.logstr(), channelContext);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> onBeforeClose(ChannelContext channelContext, Throwable throwable, <span class="keyword">String</span> remark, <span class="built_in">boolean</span> isRemove) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">         <span class="keyword">super</span>.onBeforeClose(channelContext, throwable, remark, isRemove);</span><br><span class="line">         <span class="keyword">if</span> (<span class="built_in">log</span>.isInfoEnabled()) &#123;</span><br><span class="line">             <span class="built_in">log</span>.info(<span class="string">"onBeforeClose\r\n&#123;&#125;"</span>, channelContext);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         WsSessionContext wsSessionContext = (WsSessionContext) channelContext.<span class="built_in">get</span>();</span><br><span class="line"></span><br><span class="line">         <span class="keyword">if</span> (wsSessionContext != <span class="keyword">null</span> &amp;&amp; wsSessionContext.isHandshaked()) &#123;</span><br><span class="line"></span><br><span class="line">             <span class="built_in">int</span> count = Tio.getAll(channelContext.tioConfig).getObj().<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">             <span class="keyword">String</span> msg = channelContext.getClientNode().toString() + <span class="string">" 离开了，现在共有【"</span> + count + <span class="string">"】人在线"</span>;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> onAfterDecoded(ChannelContext channelContext, Packet packet, <span class="built_in">int</span> packetSize) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">         <span class="keyword">super</span>.onAfterDecoded(channelContext, packet, packetSize);</span><br><span class="line">         <span class="keyword">if</span> (<span class="built_in">log</span>.isInfoEnabled()) &#123;</span><br><span class="line">             <span class="built_in">log</span>.info(<span class="string">"onAfterDecoded\r\n&#123;&#125;\r\n&#123;&#125;"</span>, packet.logstr(), channelContext);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> onAfterReceivedBytes(ChannelContext channelContext, <span class="built_in">int</span> receivedBytes) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">         <span class="keyword">super</span>.onAfterReceivedBytes(channelContext, receivedBytes);</span><br><span class="line">         <span class="keyword">if</span> (<span class="built_in">log</span>.isInfoEnabled()) &#123;</span><br><span class="line">             <span class="built_in">log</span>.info(<span class="string">"onAfterReceivedBytes\r\n&#123;&#125;"</span>, channelContext);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> onAfterHandled(ChannelContext channelContext, Packet packet, <span class="keyword">long</span> cost) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">         <span class="keyword">super</span>.onAfterHandled(channelContext, packet, cost);</span><br><span class="line">         <span class="keyword">if</span> (<span class="built_in">log</span>.isInfoEnabled()) &#123;</span><br><span class="line">             <span class="built_in">log</span>.info(<span class="string">"onAfterHandled\r\n&#123;&#125;\r\n&#123;&#125;"</span>, packet.logstr(), channelContext);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WebSocketProperties-java-端口和网址的配置"><a href="#WebSocketProperties-java-端口和网址的配置" class="headerlink" title="WebSocketProperties.java(端口和网址的配置)"></a>WebSocketProperties.java(端口和网址的配置)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @author 端口和网址的配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">@Component</span><br><span class="line">@ConfigurationProperties(prefix = <span class="string">"websocket"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketProperties</span> &#123;</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 端口</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * ip地址</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> port;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPort</span><span class="params">(<span class="keyword">int</span> port)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.port = port;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getIp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ip;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIp</span><span class="params">(String ip)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.ip = ip;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>WebSocketProperties类的配置一些配置是在application.yml文件中定义的</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">websocket:</span></span><br><span class="line"><span class="symbol">  ip:</span> <span class="number">192.168</span>.xx.xxx <span class="meta">#服务器的IP地址</span></span><br><span class="line"><span class="symbol">  port:</span> <span class="number">8089</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>启动项目后出现如下图内容,证明服务端配置成功<br><img src="/blog/im/t-io(01).jpg" alt><br>由于部分内容待完善,源码暂时无法提供,等功能完善后会提供源码。<br>此篇内容仅仅只是记录自己在完成该功能的时候的一些过程，以及自己的思路。其中也遇到一些问题，通过网上查找了相关一些资料，如有不对的地方或者待完善的地方，请多多指教。</p>
+<h1 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h1>
+      
+    </div>
+
+    <!-- 增加相关推荐 -->
+     
+          
+
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\IM\Im_Deploy.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;即时通讯-生产环境的部署(完结)</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\IM\Im_Layim.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;即时通讯-LayIM(二)</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\IM\Im_LayimCode.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;即时通讯-客户端格式(三)</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\IM\Im_SingleChat.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;即时通讯-单聊(四)</a></div>
+      
+    </div>
+  
+  </ul>
+  <style type="text/css">
+    a:hover{
+      text-decoration: none;
+    }
+  </style>
+
+
+
+
+
+      
+
+    
+    
+    
+
+      <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+        
+      </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IM/" rel="tag"><i class="fa fa-tag"></i> IM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Java/Flow_code.html" rel="next" title="流水单号的生产">
+                <i class="fa fa-chevron-left"></i> 流水单号的生产
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/IM/Im_Layim.html" rel="prev" title="即时通讯-LayIM(二)">
+                即时通讯-LayIM(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="夏天的风">
+            
+              <p class="site-author-name" itemprop="name">夏天的风</p>
+              <p class="site-description motion-element" itemprop="description">夏天的风</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://bolg.lmdream.cn" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于t-io"><span class="nav-number">2.</span> <span class="nav-text">关于t-io</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开发环境"><span class="nav-number">3.</span> <span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务端搭建"><span class="nav-number">4.</span> <span class="nav-text">服务端搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#详细代码"><span class="nav-number">5.</span> <span class="nav-text">详细代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引入t-io的包"><span class="nav-number">5.1.</span> <span class="nav-text">引入t-io的包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServerSocketStarter-java"><span class="nav-number">5.2.</span> <span class="nav-text">ServerSocketStarter.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WesServerConfig-java"><span class="nav-number">5.3.</span> <span class="nav-text">WesServerConfig.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WsStarter-java"><span class="nav-number">5.4.</span> <span class="nav-text">WsStarter.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WesMsgHandler-java"><span class="nav-number">5.5.</span> <span class="nav-text">WesMsgHandler.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WesServerAioHandler-java"><span class="nav-number">5.6.</span> <span class="nav-text">WesServerAioHandler.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WesServerAioListener-java"><span class="nav-number">5.7.</span> <span class="nav-text">WesServerAioListener.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocketProperties-java-端口和网址的配置"><span class="nav-number">5.8.</span> <span class="nav-text">WebSocketProperties.java(端口和网址的配置)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#说明"><span class="nav-number">6.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束"><span class="nav-number">7.</span> <span class="nav-text">结束</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考内容"><span class="nav-number">8.</span> <span class="nav-text">参考内容</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+      <!-- 此处为密码查看的代码 -->
+       <script src="/js/src/jquery-3.1.1.js"></script>
+
+<script>
+    //暂时储存文章中的内容
+    var div = $('.post-body');
+    //暂时储存目录的内容
+    //var toc=$('.post-toc-wrap');
+    var toc=$('.nav');
+
+    function password() {
+        if(''){
+            //将文章内容删除
+            div.remove();
+            //将目录删除
+            toc.remove();
+            //将文章删除后，向原来文章的地方添加，应该出现的提示用户输入密码的样式
+            //下面这里的第一个用textarea是因为如果在手机端的时候只能显示一部分文字，
+            //只是拓展:input里面的字只能显示一行，不会自动换行，目前上网搜索没有发现好的办法，所以用了textarea，右下角的小三角通过resize:none 去掉。
+            $('.post-header').after(
+            '<span class="description" value="请输入密码，然后按 Enter 键阅读" style="font-style: oblique;font-weight: bold;border: none;display: block;'+
+            'width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none ">'+
+            '请输入密码，然后按 Enter 键阅读' +
+            '</span>' +
+            '<div class="qiang" style="height: 100px;width: 60%;margin:0 auto">' +
+            '<input class="password"  type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;' +
+            'margin: 0 auto;outline: none;width:95%"/>' +
+            '</div>')
+            //绑定点击事件，如果是点击的.password 这个div就改变样式，如果是document中除了div之外的其他任何元素，就变回原来的样式。
+            document.onclick = function (event) {
+                var e = event || window.event;
+                var elem = e.srcElement || e.target;
+
+                while (elem) {
+                    if (elem != document) {
+                        if (elem.className == "password") {
+                            //$(".password").animate({paddingTop:"30px",width:"100%",borderWidth:"2px"},300)
+                            return;
+                        }
+                        elem = elem.parentNode;
+                    } else {
+                        //$(".password").animate({paddingTop:"0px",width:"95%",borderWidth:"1px"},300)
+                        return;
+                    }
+                }
+            }
+            //绑定enter键按下后离开的事件
+            $(document).keyup(function(event){
+                if(event.keyCode ==13&&$('.password').length>0){
+                    //console.log($('.password').val())
+                    //console.log('')
+                    if ($('.password').val() == '') {
+                        //恢复文章内容
+                        (div).appendTo($(".post-header"))
+                        //恢复目录
+                        toc.appendTo($(".sidebar-inner"))
+                        //删除本页面的输入密码组件
+                        $(".description").remove();
+                        $(".qiang").remove();
+                        $(".password").remove();
+
+                        //重新处理pjax事件,如果没有加pjax的从下面这行起到下面的else之间的代码需要去掉。
+                        //图片懒加载，没有加入此功能的这个函数需要去掉
+
+                        //pjax后出现文章不显示，没有pjax的下面四行需要去掉
+                        $(".post-block").css({opacity:1});
+                        $(".post-header").css({opacity:1});
+                        $(".post-body").css({opacity:1});
+                        $(".pagination").css({opacity:1});
+                    }else {
+                        alert("对不起，密码输入错误。")
+                    }
+                }
+                //将document的keyup移除，防止在pjax的情况下会重复绑定事件
+            });
+        }
+    }
+    password();
+</script>
+
+
+<script>
+function loadPhotos(e) {
+        if ($("#tagType").val(e), 3 === e)
+            $(".description").remove(),
+                $(".qiang").remove(),
+                $(".ownPhotoPassword").remove(),
+                $(".babyPhotoPassword").remove(),
+                checkPassword(e);
+        else {
+            var o = function(e) {
+                var o = document.createElement("script");
+                document.getElementsByTagName("body")[0].appendChild(o), o.setAttribute("src", e)
+            };
+            setTimeout(function() {
+                o("./ins.js")
+            }, 0)
+        }
+    }
+    function checkPassword(e) {
+            if ("123" == $("#babyPhotoPassword").val()) {
+                var t = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                return void setTimeout(function() {
+                    t("./ins.js")
+                }, 0)
+            }
+            div3.remove(), $("#-3").append('<span class="description" value="请输入密码，然后按 Enter 键欣赏" style="font-style: oblique;font-weight: bold;border: none;display: block;width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none "><i class="fa fa-heartbeat" id="myheartbeat"></i> 请输入密码，然后按 Enter 键欣赏  <i class="fa fa-heartbeat" id="myheartbeat"></i></span><div class="qiang" style="height: 100px;width: 60%;margin:0 auto"><input class="babyPhotoPassword" id="111" onkeydown="keyup_submit(event);" type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;margin: 0 auto;outline: none;width:95%"/></div>')
+        setTimeout("$('.ownPhotoPassword').focus()", 100), setTimeout("$('.babyPhotoPassword').focus()", 100)
+    }
+    function keyup_submit(e) {
+        var t = window.event || e;
+        if (13 == t.keyCode && $(".ownPhotoPassword").length > 0)
+            if ("123" == $(".ownPhotoPassword").val()) {
+                $("#ownPhotoPassword").val($(".ownPhotoPassword").val()), $("#-2").append(div2), $(".description").remove(), $(".qiang").remove(), $(".ownPhotoPassword").remove();
+                var o = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                setTimeout(function() {
+                    o("./ins.js")
+                }, 0)
+            } else alert("对不起，密码输入错误。");
+        if (13 == t.keyCode && $(".babyPhotoPassword").length > 0)
+            if ("123" == $(".babyPhotoPassword").val()) {
+                $("#babyPhotoPassword").val($(".babyPhotoPassword").val()), $("#-3").append(div3), $(".description").remove(), $(".qiang").remove(), $(".babyPhotoPassword").remove();
+                var o = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                setTimeout(function() {
+                    o("./ins.js")
+                }, 0)
+            } else alert("对不起，密码输入错误。")
+    }
+    var div2 = $(".instagram2");
+    var div3 = $(".instagram3");
+</script>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">夏天的风</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">博客全站共&#58;</span>
+    
+    <span title="博客全站共">40.1k 字</span>
+  
+</div>
+
+
+
+
+
+
+
+
+<!--
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共40.1k字</span>
+</div>
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
+-->
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  <!--崩溃欺骗-->
+  <script type="text/javascript" src="/js/src/collapse.js"></script>
+
+
+
+
+</body>
+</html>

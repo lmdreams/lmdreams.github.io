@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|SourceSansPro-Semibold:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring Boot,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="夏天的风" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="keywords" content="Spring Boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常见的四种限流算法">
+<meta property="og:url" content="http://bolg.lmdream.cn/SpringBoot/rateLimiter_algorithm.html">
+<meta property="og:site_name" content="夏天的风">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_11.png">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_12.png">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_13.png">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_14.png">
+<meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_15.png">
+<meta property="og:updated_time" content="2024-08-13T09:20:53.408Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常见的四种限流算法">
+<meta name="twitter:image" content="http://bolg.lmdream.cn/blog/java/img_11.png">
+
+<!-- 快速接入 DaoVoice -->
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bolg.lmdream.cn/SpringBoot/rateLimiter_algorithm.html">
+
+
+
+
+
+  <title>常见的四种限流算法 | 夏天的风</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  
+
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">夏天的风</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夏天的风</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-record">
+          <a href="/record/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            生活
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tool">
+          <a href="/tool/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-recycle"></i> <br>
+            
+            工具
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bolg.lmdream.cn/SpringBoot/rateLimiter_algorithm.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏天的风">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏天的风">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">常见的四种限流算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-08-15T22:25:24+08:00">
+                2022-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Boot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+
+
+      
+         <br>
+<a id="more"></a>
+
+ <div class="note info"><p>近期处理了关于限流相关的问题,了解到有四种限流的算法,以下的代码使用的是Redis缓存,将此次的使用进行一个记录,以下是相关的代码:</p></div>
+
+ <!-- more -->
+
+<h1 id="限流的方式"><a href="#限流的方式" class="headerlink" title="限流的方式"></a>限流的方式</h1><h2 id="1-固定窗口算法-计数器"><a href="#1-固定窗口算法-计数器" class="headerlink" title="1.固定窗口算法(计数器)"></a>1.固定窗口算法(计数器)</h2><blockquote>
+<p><strong>介绍</strong>:</p>
+<ul>
+<li>固定窗口又称固定窗口（又称计数器算法，Fixed Window）限流算法，是最简单的限流算法，通过在单位时间内维护的计数器来控制该时间单位内的最大访问量。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>优点</strong>:</p>
+<ul>
+<li>固定窗口算法非常简单，易于实现和理解</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>缺点</strong>:</p>
+<ul>
+<li>存在明显的临界问题,当两个窗口交界处，瞬时流量可能为2n,如图所示:限流阀值为2个请求,单位时间窗口是1s,在单位时间内的前0.7-1s和1-1.4s，</li>
+<li>分别并发2个请求,虽然在时间窗口期间都没有超过阀值，但是如果算0.7-1.4s,则并发数为4个，已经超过单位时间1s不超过2阀值的定义</li>
+</ul>
+</blockquote>
+<p><strong>原理图:</strong><br><img src="/blog/java/img_11.png" alt="img_11.png"></p>
+<p><strong>产生的问题:</strong><br><img src="/blog/java/img_12.png" alt="img_12.png"></p>
+<h3 id="固定窗口算法代码"><a href="#固定窗口算法代码" class="headerlink" title="固定窗口算法代码:"></a>固定窗口算法代码:</h3><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 固定窗口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> windowRate(RateLimiter rateLimiter, RateLimiterData rateLimiterData,String combineKey)&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取当前时间</span></span><br><span class="line">    <span class="keyword">long</span> currentTime = System.currentTimeMillis();</span><br><span class="line">    <span class="comment">// 判断是否在窗口期</span></span><br><span class="line">    <span class="keyword">if</span> (currentTime - rateLimiterData.getStartTime() &gt; TimeUnit.SECONDS.toMillis(rateLimiter.time())) &#123;</span><br><span class="line">        <span class="comment">//重置计数器</span></span><br><span class="line">        rateLimiterData.setRequestsMax(<span class="number">0</span>);</span><br><span class="line">        rateLimiterData.setStartTime(currentTime);</span><br><span class="line">        log.warn(<span class="string">"startTime:"</span>+rateLimiterData.getStartTime());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最大请求数量大于计数器数量</span></span><br><span class="line">    <span class="keyword">if</span> (rateLimiter.<span class="keyword">count</span>() &gt; rateLimiterData.getRequestsMax() ) &#123;</span><br><span class="line">        <span class="comment">// 计数器自增</span></span><br><span class="line">        Integer <span class="keyword">count</span>=rateLimiterData.getRequestsMax();</span><br><span class="line"></span><br><span class="line">        rateLimiterData.setRequestsMax(<span class="keyword">count</span>+<span class="number">1</span>);</span><br><span class="line">        log.warn(<span class="string">"requestsMax:"</span>+rateLimiterData.getRequestsMax());</span><br><span class="line">        redisCache.setCacheObject(combineKey, rateLimiterData,<span class="number">20</span>,TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-滑动窗口算法"><a href="#2-滑动窗口算法" class="headerlink" title="2.滑动窗口算法"></a>2.滑动窗口算法</h2><blockquote>
+<p><strong>介绍</strong>:</p>
+<ul>
+<li>为了防止瞬时流量，可以把固定窗口近一步划分成多个格子，每次向后移动一小格，而不是固定窗口大小，可以解决固定窗口临界值的问题,但是无法避免。这就是滑动窗口（Sliding Window）。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>优点</strong>:</p>
+<ul>
+<li>可以消除计数器算法跨周期时的流量高峰。周期内的间隔划分越多，流量越平稳。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>缺点</strong>:</p>
+<ul>
+<li>无法缓存多余的请求,需要合理调整时间窗口大小,流量的数量达到阈值时会瞬间掐断流量，会导致流量不够平滑.</li>
+</ul>
+</blockquote>
+<p><strong>原理图:</strong><br><img src="/blog/java/img_13.png" alt="img_13.png"></p>
+<div class="note info"><p>第一次的请求发起时间为:14:30:00 窗口时间为:14:30:00-14:30:02<br>第二次的请求发起时间为:14:30:01 窗口时间为:14:30:00-14:30:02<br>第三次的请求发起时间为:14:30:03 窗口时间为:14:30:02-14:30:04<br>第四次的请求发起时间为:14:30:05 窗口时间为:14:30:04-14:30:06</p></div>
+
+<div class="note info"><p>滑动窗口相比较固定窗口是如何减少临界值的影响:<br>从图上可以看到时间创建是一种向右滑动的方式前进, 滑动窗口限流能够显著减少临界问题产生的影响,但是不能消除掉。<br>窗口每次向前滑动一个单元格,当请求到达时，只要窗口中所有单元格的计数总和不超过阈值都可以放行, 假如2s秒限流4个 那么就是也就是滑动窗口（单位时间）被划分为4个小周期。每格表示0.5S。每过0.5s时间窗口就会往右滑动一格。而且每个小周期，都有自己独立的计数器<br>具体的示例以及固定窗口和滑动窗口的区别:<br>14:30:00-14:30:02<br>滑动窗口一:0-0.5<br>滑动窗口二0.5-1<br>滑动窗口三:1-1.5<br>滑动窗口四:1.5-2<br>此时分别在1.8s来了5个请求,滑动窗口三已经限流,2.6s又来了5个请求,如果是固定算法的话会不限流,<br>但是过了1s会向右移动两个周期,当前的时间窗口单位2.5-3s,2.6处于这个时间段之内,这个区域的数量已经超过限定.就会触发限流。<br>滑动算法的周期划分越多,那么滚动的就会越平滑,限流的统计数量则越准确;</p></div>
+<p><strong>问题:</strong><br> 但是临界值的问题无法消除,只是缩小了范围而已;</p>
+<h3 id="滑动窗口算法代码"><a href="#滑动窗口算法代码" class="headerlink" title="滑动窗口算法代码:"></a>滑动窗口算法代码:</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">boolean</span>  slidingWindowRateState(RateLimiter rateLimiter,<span class="built_in">String</span> combineKey)&#123;</span><br><span class="line">       TreeMap&lt;Long, <span class="built_in">Integer</span>&gt; counters = <span class="literal">new</span> TreeMap&lt;&gt;();</span><br><span class="line">       counters=redisCache.getCacheObject(combineKey);</span><br><span class="line">       <span class="keyword">if</span>(counters==<span class="built_in">null</span>)&#123;</span><br><span class="line">           counters=<span class="literal">new</span> TreeMap&lt;&gt;();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="built_in">boolean</span> state=slidingWindowRate(rateLimiter,counters,combineKey);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> state;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 滑动窗口</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="built_in">boolean</span>  slidingWindowRate(RateLimiter rateLimiter, TreeMap&lt;Long, <span class="built_in">Integer</span>&gt; counters,<span class="built_in">String</span> combineKey)&#123;</span><br><span class="line">       <span class="comment">// 获取当前时间</span></span><br><span class="line">       long currentTime = System.currentTimeMillis();</span><br><span class="line">       <span class="comment">//窗口的开始时间戳</span></span><br><span class="line">       long slideTime=currentTime<span class="params">-TimeUnit.SECONDS.toMillis</span>(rateLimiter.time());</span><br><span class="line">       <span class="comment">//当前窗口总请求数</span></span><br><span class="line">       int requestsCount = <span class="number">0</span>;</span><br><span class="line">       <span class="comment">//遍历存储的计数器</span></span><br><span class="line">       Iterator&lt;<span class="built_in">Map</span>.Entry&lt;Long, <span class="built_in">Integer</span>&gt;&gt; iterator = counters.entrySet().iterator();</span><br><span class="line">       <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">           <span class="built_in">Map</span>.Entry&lt;Long, <span class="built_in">Integer</span>&gt; entry = iterator.next();</span><br><span class="line">           <span class="comment">// 删除过期的子窗口计数器</span></span><br><span class="line">           <span class="keyword">if</span> (entry.getKey() &lt; slideTime) &#123;</span><br><span class="line">               iterator.remove();</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="comment">//当前窗口时间的所有计数器进行累加</span></span><br><span class="line">               requestsCount = requestsCount + entry.getValue();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (requestsCount &gt;= rateLimiter.count()) &#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">       &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="comment">//计数器增加1</span></span><br><span class="line">           counters.merge(currentTime, <span class="number">1</span>, <span class="built_in">Integer</span><span class="type">::sum</span>);</span><br><span class="line">           redisCache.setCacheObject(combineKey, counters,<span class="number">20</span>,TimeUnit.SECONDS);</span><br><span class="line">           <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-漏桶算法"><a href="#3-漏桶算法" class="headerlink" title="3.漏桶算法"></a>3.漏桶算法</h2><blockquote>
+<p><strong>介绍</strong>:</p>
+<ul>
+<li>漏桶限流算法（Leaky Bucket Algorithm）是一种流量控制算法，用于控制流入网络的数据速率，以防止网络拥塞。它的思想是将数据包看作是水滴，漏桶看作是一个固定容量的水桶，数据包像水滴一样从桶的顶部流入桶中，并通过桶底的一个小孔以一定的速度流出，从而限制了数据包的流量。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>优点</strong>:</p>
+<ul>
+<li>令牌桶算法是一种流量控制机制，非常适合于处理突发流量，同时保证一定程度的平滑流动。它的工作原理类似于一个实际的水桶，其中水桶代表令牌桶，水流代表令牌。令牌以恒定的速率填充到桶中，直到达到桶的容量上限，多余的&gt; 令牌会被丢弃。</li>
+<li>可以平滑限制请求的处理速度，避免瞬间请求过多导致系统崩溃或者雪崩。</li>
+<li>可以控制请求的处理速度，使得系统可以适应不同的流量需求，避免过载或者过度闲置。</li>
+<li>可以通过调整桶的大小和漏出速率来满足不同的限流需求，可以灵活地适应不同的场景。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>缺点</strong>:</p>
+<ul>
+<li>短时间内有突发的大流量时，漏桶可能处理不了这些请求,还有就是同时放行多个请求的时候会导致业务处理压力比较大。</li>
+</ul>
+</blockquote>
+<p><strong>原理图:</strong><br><img src="/blog/java/img_14.png" alt="img_14.png"><br><strong>问题:</strong><br>因为速率是固定的无法处理瞬时利流量,不能很快处理请求</p>
+<h3 id="漏桶算法代码"><a href="#漏桶算法代码" class="headerlink" title="漏桶算法代码:"></a>漏桶算法代码:</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 漏桶</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> <span class="built_in">boolean</span> leakyBucket(RateLimiter rateLimiter, RateLimiterData rateLimiterData,<span class="keyword">String</span> combineKey)&#123;</span><br><span class="line">      <span class="comment">//漏水速率，单位:个/秒</span></span><br><span class="line">      <span class="built_in">int</span> rate = (<span class="built_in">int</span>) Math.<span class="built_in">ceil</span>( rateLimiter.count() / rateLimiter.time());</span><br><span class="line">      rateLimiterData=redisCache.getCacheObject(combineKey);</span><br><span class="line">      <span class="keyword">long</span> requestsTime = System.currentTimeMillis();</span><br><span class="line">          <span class="comment">// 时间间隔=本次请求的时间和上次请求的时间</span></span><br><span class="line">          <span class="keyword">if</span>(rateLimiterData.getStartTime()==<span class="number">0</span>)&#123;</span><br><span class="line">              rateLimiterData.setStartTime(requestsTime);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">long</span> leakDuration = requestsTime - rateLimiterData.getStartTime();</span><br><span class="line">              <span class="comment">// 计算漏出的水量</span></span><br><span class="line">              <span class="keyword">long</span> leakWater = leakDuration / TimeUnit.SECONDS.toMillis(<span class="number">1</span>) * rate;</span><br><span class="line">              <span class="keyword">if</span>(leakWater&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                  <span class="comment">// 漏桶漏出水后,更新桶里面的数量</span></span><br><span class="line">                  <span class="built_in">int</span> waterNum = (<span class="built_in">int</span>)Math.<span class="built_in">max</span>(<span class="number">0</span>, rateLimiterData.getRequestsMax() - leakWater);</span><br><span class="line">                  rateLimiterData.setRequestsMax(waterNum);</span><br><span class="line">                  rateLimiterData.setStartTime(requestsTime);</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 判断桶中的水数量大于请求的数量,大于则添加水</span></span><br><span class="line">          <span class="keyword">if</span> (rateLimiter.count()&gt;rateLimiterData.getRequestsMax()) &#123;</span><br><span class="line">              rateLimiterData.setRequestsMax(rateLimiterData.getRequestsMax()+rateLimiter.deduction());</span><br><span class="line">              redisCache.setCacheObject(combineKey, rateLimiterData,<span class="number">20</span>,TimeUnit.SECONDS);</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-令牌桶算法"><a href="#4-令牌桶算法" class="headerlink" title="4.令牌桶算法"></a>4.令牌桶算法</h2><blockquote>
+<p><strong>介绍:</strong></p>
+<ul>
+<li>令牌桶算法是一种常用的限流算法，可以用于限制单位时间内请求的数量。该算法维护一个固定容量的令牌桶，每秒钟会向令牌桶中放入一定数量的令牌。当有请求到来时，如果令牌桶中有足够的令牌，则请求被允许通过并从令牌桶中消耗一个令牌，否则请求被拒绝。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>优点:</strong></p>
+<ul>
+<li>稳定性高：令牌桶算法可以控制请求的处理速度，可以使系统的负载变得稳定。</li>
+<li>精度高：令牌桶算法可以根据实际情况动态调整生成令牌的速率，可以实现较高精度的限流。</li>
+<li>弹性好：令牌桶算法可以处理突发流量，可以在短时间内提供更多的处理能力，以处理突发流量。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>实现复杂：令牌桶算法的实现较为复杂。对短时请求难以处理：在短时间内有大量请求到来时，可能会导致令牌桶中的令牌被快速消耗完，从而限流。这种情况下，可以考虑使用漏桶算法。</li>
+<li>时间精度要求高：令牌桶算法要求时间精度较高，因为是根据时间来生成令牌的数量,如果系统时间出现错误，会导致限流效果不理想。</li>
+</ul>
+</blockquote>
+<p>原理图:<br><img src="/blog/java/img_15.png" alt="img_15.png"></p>
+<h3 id="令牌桶算法代码"><a href="#令牌桶算法代码" class="headerlink" title="令牌桶算法代码:"></a>令牌桶算法代码:</h3><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 令牌桶</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> rateLimiter</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> rateLimiterData</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> combineKey</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">tokenBucket</span><span class="params">(RateLimiter rateLimiter, RateLimiterData rateLimiterData,String combineKey)</span></span>&#123;</span><br><span class="line">       <span class="comment">//令牌生成的速率，单位:个/秒</span></span><br><span class="line">       <span class="keyword">int</span> rate = (<span class="keyword">int</span>) Math.ceil( rateLimiter.count() / rateLimiter.time());</span><br><span class="line">       rateLimiterData=redisCache.getCacheObject(combineKey);</span><br><span class="line">       <span class="comment">//请求时间</span></span><br><span class="line">       <span class="keyword">long</span> requestsTime = System.currentTimeMillis();</span><br><span class="line">           <span class="keyword">if</span>(rateLimiterData.getStartTime()==<span class="number">0</span>)&#123;</span><br><span class="line">               rateLimiterData.setRequestsMax(rateLimiter.count()-rateLimiter.deduction());</span><br><span class="line">               rateLimiterData.setStartTime(requestsTime);</span><br><span class="line">               redisCache.setCacheObject(combineKey, rateLimiterData,<span class="number">20</span>,TimeUnit.SECONDS);</span><br><span class="line">           &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="comment">// 时间间隔=本次请求的时间和上次请求的时间</span></span><br><span class="line">               <span class="keyword">long</span> residueTime = requestsTime - rateLimiterData.getStartTime();</span><br><span class="line">               <span class="comment">// 计算令牌产生的数量</span></span><br><span class="line">               <span class="keyword">int</span> tokenNum = (<span class="keyword">int</span>) (residueTime/ TimeUnit.SECONDS.toMillis(<span class="number">1</span>) * rate);</span><br><span class="line">               <span class="comment">//总数量=剩余的数量+生成的数量</span></span><br><span class="line">               Integer generateToken= Math.abs(rateLimiterData.getRequestsMax() + tokenNum);</span><br><span class="line">               <span class="comment">//最后剩余的数量</span></span><br><span class="line">               <span class="keyword">int</span> residueNum = Math.min(rateLimiterData.getRequestsMax(), generateToken);</span><br><span class="line">               <span class="comment">//剩余数量</span></span><br><span class="line">               rateLimiterData.setRequestsMax(residueNum);</span><br><span class="line">               rateLimiterData.setStartTime(requestsTime);</span><br><span class="line">               <span class="comment">//判断剩余的令牌数量是否大于等于扣减的数量</span></span><br><span class="line">               <span class="keyword">if</span> (rateLimiterData.getRequestsMax() &gt;= rateLimiter.deduction()) &#123;</span><br><span class="line">                   rateLimiterData.setRequestsMax(rateLimiterData.getRequestsMax()-rateLimiter.deduction());</span><br><span class="line">                   redisCache.setCacheObject(combineKey, rateLimiterData,<span class="number">20</span>,TimeUnit.SECONDS);</span><br><span class="line">                   <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="公共的参数"><a href="#公共的参数" class="headerlink" title="公共的参数"></a>公共的参数</h1><h2 id="RateLimiterAspect-java"><a href="#RateLimiterAspect-java" class="headerlink" title="RateLimiterAspect.java"></a>RateLimiterAspect.java</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="markdown">/**</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>限流</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> */</span></span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">RateLimiterAspect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    private RedisCache redisCache;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span>(<span class="string">"@annotation(rateLimiter)"</span>)</span><br><span class="line">    public <span class="keyword">void</span> doBefore(JoinPoint point, RateLimiter rateLimiter) throws Throwable &#123;</span><br><span class="line">        <span class="comment">//厂商信息</span></span><br><span class="line">        LimitResultType limitResultType = rateLimiter.limitResultType();</span><br><span class="line">        <span class="comment">//返回值类型</span></span><br><span class="line">        <span class="built_in">String</span> resultType = rateLimiter.resultType();</span><br><span class="line">        <span class="built_in">String</span> luaScript = buildScript();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获得key</span></span><br><span class="line">        <span class="built_in">String</span> combineKey = getCombineKey(rateLimiter, point);</span><br><span class="line">        boolean state = <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment"><span class="markdown">/<span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">**开始**</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span>/</span></span></span><br><span class="line">        RateLimiterData rateLimiterData = <span class="keyword">new</span> RateLimiterData();</span><br><span class="line">        rateLimiterData = redisCache.getCacheObject(combineKey);</span><br><span class="line">        <span class="keyword">if</span> (rateLimiterData == <span class="keyword">null</span>) &#123;</span><br><span class="line">            RateLimiterData rateLimiterData1 = <span class="keyword">new</span> RateLimiterData();</span><br><span class="line">            rateLimiterData1.setRequestsMax(<span class="number">0</span>);</span><br><span class="line">            rateLimiterData1.setStartTime(<span class="number">0</span>);</span><br><span class="line">            rateLimiterData = rateLimiterData1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//固定窗口</span></span><br><span class="line">        state = windowRate(rateLimiter, rateLimiterData, combineKey);</span><br><span class="line">        <span class="comment">//漏桶</span></span><br><span class="line">        state = leakyBucket(rateLimiter, rateLimiterData, combineKey);</span><br><span class="line">        <span class="comment">//令牌</span></span><br><span class="line">        state = tokenBucket(rateLimiter, rateLimiterData, combineKey);</span><br><span class="line">        <span class="comment"><span class="markdown">/<span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">**结束**</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span>/</span></span></span><br><span class="line">        <span class="comment">// 滑动窗口</span></span><br><span class="line">        <span class="comment">// state=slidingWindowRateState(rateLimiter,combineKey);</span></span><br><span class="line">        log.warn(<span class="string">"状态:"</span> + state);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!state) &#123;</span><br><span class="line">                <span class="comment">//Xml格式返回</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="string">"0"</span>.equals(resultType)) &#123;</span><br><span class="line">                    log.warn(<span class="string">"访问过于频繁，请稍候再试"</span>);</span><br><span class="line">                    <span class="comment">//院感</span></span><br><span class="line">                    <span class="keyword">if</span> (limitResultType.getCode().equals(LimitResultType.NAME.getCode())) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> XmlRRException(LimitResultType.NAME, <span class="string">"访问过于频繁，请稍候再试"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//LIS</span></span><br><span class="line">                    <span class="keyword">if</span> (limitResultType.getCode().equals(LimitResultType.NAME_PACS.getCode())) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> XmlRRException(LimitResultType.NAME_PACS, ResultCodeEnum.SERVER_FAIL, <span class="string">"访问过于频繁，请稍候再试"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (XmlRRException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> e;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">"服务器限流异常，请稍候再试"</span>);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"服务器限流异常，请稍候再试"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="RateLimiterData-java"><a href="#RateLimiterData-java" class="headerlink" title="RateLimiterData.java"></a>RateLimiterData.java</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 限流的参数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">@Data</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RateLimiterData</span> &#123;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span>   <span class="keyword">int</span> requestsMax = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> startTime =  <span class="number">0L</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="RateLimiter-java"><a href="#RateLimiter-java" class="headerlink" title="RateLimiter.java"></a>RateLimiter.java</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">@Target(ElementType.METHOD)</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Documented</span><br><span class="line"><span class="keyword">public</span> @<span class="keyword">interface</span> <span class="title">RateLimiter</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 限流key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">key</span>(<span class="params"></span>) <span class="keyword">default</span> "rate_limit:"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 限流时间,单位秒</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">time</span>(<span class="params"></span>) <span class="keyword">default</span> 60</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 限流次数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">count</span>(<span class="params"></span>) <span class="keyword">default</span> 60</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 扣减数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deduction</span>(<span class="params"></span>) <span class="keyword">default</span> 1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回类型 0 为xml 1为 json</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">resultType</span>(<span class="params"></span>) <span class="keyword">default</span> "0"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 限流类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">LimitType <span class="title">limitType</span>(<span class="params"></span>) <span class="keyword">default</span> LimitType.DEFAULT</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 厂商返回类型</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">LimitResultType <span class="title">limitResultType</span>(<span class="params"></span>) <span class="keyword">default</span> LimitResultType.NAME_DEFAULT</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><blockquote>
+<ul>
+<li>固定窗口算法:实现简单，性能高，有明显的临界问题，瞬时流量可达到阈值的2倍。</li>
+<li>滑动窗口算法:消除了临界问题，但是当流量到达阈值时会瞬间掐断流量，导致流量不够平滑。</li>
+<li>漏桶算法:想要达到限流的目的，又不会掐断流量，使得流量更加平滑,但是因为是固定速率流出水,无法处理瞬时利流量,不能很快处理请求。</li>
+<li>令牌算法:处理突发流量，同时保证一定程度的平滑流动。</li>
+</ul>
+</blockquote>
+<hr>
+<p>此次以上就是限流的四种算法,具体使用那种算法需要根据自身的业务进行选择,如果是分布式的话推荐使用redis+Lua脚本来实现市面上也有其他的限流工具，<br>如:基于令牌桶实现的限流组件Guava,基于滑动窗口实现的分布式服务架构的流量控制框架Sentinel。</p>
+
+      
+    </div>
+
+    <!-- 增加相关推荐 -->
+     
+          
+
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_annotation.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot常用注解</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_shiro.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Springboot+shiro无权限跳转失败</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_rateLimiter.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot限流</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_resubmit.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot防止重复提交</a></div>
+      
+    </div>
+  
+    <div class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_configuration.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;SpringBoot配置文件详解</a></div>
+      
+    </div>
+  
+  </ul>
+  <style type="text/css">
+    a:hover{
+      text-decoration: none;
+    }
+  </style>
+
+
+
+
+
+      
+
+    
+    
+    
+
+      <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+        
+      </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring-Boot/" rel="tag"><i class="fa fa-tag"></i> Spring Boot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/SpringBoot/springboot_resubmit.html" rel="next" title="Spring boot防止重复提交">
+                <i class="fa fa-chevron-left"></i> Spring boot防止重复提交
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/SpringBoot/springboot_rateLimiter.html" rel="prev" title="Spring boot限流">
+                Spring boot限流 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="夏天的风">
+            
+              <p class="site-author-name" itemprop="name">夏天的风</p>
+              <p class="site-description motion-element" itemprop="description">夏天的风</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://bolg.lmdream.cn" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#限流的方式"><span class="nav-number">1.</span> <span class="nav-text">限流的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-固定窗口算法-计数器"><span class="nav-number">1.1.</span> <span class="nav-text">1.固定窗口算法(计数器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#固定窗口算法代码"><span class="nav-number">1.1.1.</span> <span class="nav-text">固定窗口算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-滑动窗口算法"><span class="nav-number">1.2.</span> <span class="nav-text">2.滑动窗口算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动窗口算法代码"><span class="nav-number">1.2.1.</span> <span class="nav-text">滑动窗口算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-漏桶算法"><span class="nav-number">1.3.</span> <span class="nav-text">3.漏桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏桶算法代码"><span class="nav-number">1.3.1.</span> <span class="nav-text">漏桶算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-令牌桶算法"><span class="nav-number">1.4.</span> <span class="nav-text">4.令牌桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#令牌桶算法代码"><span class="nav-number">1.4.1.</span> <span class="nav-text">令牌桶算法代码:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#公共的参数"><span class="nav-number">2.</span> <span class="nav-text">公共的参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiterAspect-java"><span class="nav-number">2.1.</span> <span class="nav-text">RateLimiterAspect.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiterData-java"><span class="nav-number">2.2.</span> <span class="nav-text">RateLimiterData.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiter-java"><span class="nav-number">2.3.</span> <span class="nav-text">RateLimiter.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束"><span class="nav-number">3.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+      <!-- 此处为密码查看的代码 -->
+       <script src="/js/src/jquery-3.1.1.js"></script>
+
+<script>
+    //暂时储存文章中的内容
+    var div = $('.post-body');
+    //暂时储存目录的内容
+    //var toc=$('.post-toc-wrap');
+    var toc=$('.nav');
+
+    function password() {
+        if(''){
+            //将文章内容删除
+            div.remove();
+            //将目录删除
+            toc.remove();
+            //将文章删除后，向原来文章的地方添加，应该出现的提示用户输入密码的样式
+            //下面这里的第一个用textarea是因为如果在手机端的时候只能显示一部分文字，
+            //只是拓展:input里面的字只能显示一行，不会自动换行，目前上网搜索没有发现好的办法，所以用了textarea，右下角的小三角通过resize:none 去掉。
+            $('.post-header').after(
+            '<span class="description" value="请输入密码，然后按 Enter 键阅读" style="font-style: oblique;font-weight: bold;border: none;display: block;'+
+            'width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none ">'+
+            '请输入密码，然后按 Enter 键阅读' +
+            '</span>' +
+            '<div class="qiang" style="height: 100px;width: 60%;margin:0 auto">' +
+            '<input class="password"  type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;' +
+            'margin: 0 auto;outline: none;width:95%"/>' +
+            '</div>')
+            //绑定点击事件，如果是点击的.password 这个div就改变样式，如果是document中除了div之外的其他任何元素，就变回原来的样式。
+            document.onclick = function (event) {
+                var e = event || window.event;
+                var elem = e.srcElement || e.target;
+
+                while (elem) {
+                    if (elem != document) {
+                        if (elem.className == "password") {
+                            //$(".password").animate({paddingTop:"30px",width:"100%",borderWidth:"2px"},300)
+                            return;
+                        }
+                        elem = elem.parentNode;
+                    } else {
+                        //$(".password").animate({paddingTop:"0px",width:"95%",borderWidth:"1px"},300)
+                        return;
+                    }
+                }
+            }
+            //绑定enter键按下后离开的事件
+            $(document).keyup(function(event){
+                if(event.keyCode ==13&&$('.password').length>0){
+                    //console.log($('.password').val())
+                    //console.log('')
+                    if ($('.password').val() == '') {
+                        //恢复文章内容
+                        (div).appendTo($(".post-header"))
+                        //恢复目录
+                        toc.appendTo($(".sidebar-inner"))
+                        //删除本页面的输入密码组件
+                        $(".description").remove();
+                        $(".qiang").remove();
+                        $(".password").remove();
+
+                        //重新处理pjax事件,如果没有加pjax的从下面这行起到下面的else之间的代码需要去掉。
+                        //图片懒加载，没有加入此功能的这个函数需要去掉
+
+                        //pjax后出现文章不显示，没有pjax的下面四行需要去掉
+                        $(".post-block").css({opacity:1});
+                        $(".post-header").css({opacity:1});
+                        $(".post-body").css({opacity:1});
+                        $(".pagination").css({opacity:1});
+                    }else {
+                        alert("对不起，密码输入错误。")
+                    }
+                }
+                //将document的keyup移除，防止在pjax的情况下会重复绑定事件
+            });
+        }
+    }
+    password();
+</script>
+
+
+<script>
+function loadPhotos(e) {
+        if ($("#tagType").val(e), 3 === e)
+            $(".description").remove(),
+                $(".qiang").remove(),
+                $(".ownPhotoPassword").remove(),
+                $(".babyPhotoPassword").remove(),
+                checkPassword(e);
+        else {
+            var o = function(e) {
+                var o = document.createElement("script");
+                document.getElementsByTagName("body")[0].appendChild(o), o.setAttribute("src", e)
+            };
+            setTimeout(function() {
+                o("./ins.js")
+            }, 0)
+        }
+    }
+    function checkPassword(e) {
+            if ("123" == $("#babyPhotoPassword").val()) {
+                var t = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                return void setTimeout(function() {
+                    t("./ins.js")
+                }, 0)
+            }
+            div3.remove(), $("#-3").append('<span class="description" value="请输入密码，然后按 Enter 键欣赏" style="font-style: oblique;font-weight: bold;border: none;display: block;width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none "><i class="fa fa-heartbeat" id="myheartbeat"></i> 请输入密码，然后按 Enter 键欣赏  <i class="fa fa-heartbeat" id="myheartbeat"></i></span><div class="qiang" style="height: 100px;width: 60%;margin:0 auto"><input class="babyPhotoPassword" id="111" onkeydown="keyup_submit(event);" type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;margin: 0 auto;outline: none;width:95%"/></div>')
+        setTimeout("$('.ownPhotoPassword').focus()", 100), setTimeout("$('.babyPhotoPassword').focus()", 100)
+    }
+    function keyup_submit(e) {
+        var t = window.event || e;
+        if (13 == t.keyCode && $(".ownPhotoPassword").length > 0)
+            if ("123" == $(".ownPhotoPassword").val()) {
+                $("#ownPhotoPassword").val($(".ownPhotoPassword").val()), $("#-2").append(div2), $(".description").remove(), $(".qiang").remove(), $(".ownPhotoPassword").remove();
+                var o = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                setTimeout(function() {
+                    o("./ins.js")
+                }, 0)
+            } else alert("对不起，密码输入错误。");
+        if (13 == t.keyCode && $(".babyPhotoPassword").length > 0)
+            if ("123" == $(".babyPhotoPassword").val()) {
+                $("#babyPhotoPassword").val($(".babyPhotoPassword").val()), $("#-3").append(div3), $(".description").remove(), $(".qiang").remove(), $(".babyPhotoPassword").remove();
+                var o = function(e) {
+                    var t = document.createElement("script");
+                    document.getElementsByTagName("body")[0].appendChild(t), t.setAttribute("src", e)
+                };
+                setTimeout(function() {
+                    o("./ins.js")
+                }, 0)
+            } else alert("对不起，密码输入错误。")
+    }
+    var div2 = $(".instagram2");
+    var div3 = $(".instagram3");
+</script>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">夏天的风</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">博客全站共&#58;</span>
+    
+    <span title="博客全站共">40.1k 字</span>
+  
+</div>
+
+
+
+
+
+
+
+
+<!--
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共40.1k字</span>
+</div>
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
+-->
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  <!--崩溃欺骗-->
+  <script type="text/javascript" src="/js/src/collapse.js"></script>
+
+
+
+
+</body>
+</html>
