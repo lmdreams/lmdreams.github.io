@@ -148,7 +148,7 @@
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_10.png">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_7.png">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_8.png">
-<meta property="og:updated_time" content="2024-08-13T09:23:03.085Z">
+<meta property="og:updated_time" content="2024-09-04T07:00:11.032Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring boot限流">
 <meta name="twitter:image" content="http://bolg.lmdream.cn/blog/java/img_2.png">
@@ -403,8 +403,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-08-15T22:25:24+08:00">
-                2022-08-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-08-15T22:25:24+08:00">
+                2023-08-15
               </time>
             
 
@@ -455,7 +455,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.3k
+                  1.4k
                 </span>
               
 
@@ -471,7 +471,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5 分钟
+                  6 分钟
                 </span>
               
             </div>
@@ -535,7 +535,7 @@
 <p>接口访问的结果<br><img src="/blog/java/img_6.png" alt="img_6.png"><br>成功详情:<br><img src="/blog/java/img_10.png" alt="img_10.png"><br>失败详情:<br><img src="/blog/java/img_7.png" alt="img_7.png"><br>后台显示:<br><img src="/blog/java/img_8.png" alt="img_8.png"></p>
 </blockquote>
 <p>综合结果得知成功了5次,失败了1次,所以限流成功了,因为我还设置了缓存key的过期为一分钟,下次再次访问的话会重新构建的,具体的话根据实际业务进行配置;</p>
-<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>此次只展示了限流的令牌桶的算法,这只是其中解决方法的其中之一,具体使用那种算法需要根据自身的业务进行选择,还有其他的算法后面有时间了再进行展示。</p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>此次只展示了限流的令牌桶的算法,这只是其中解决方法的其中之一,本次使用到的是Redis缓存,其他方式如:JUC中的原子类用自旋+cas实现、guava的限流器(synchronized实现),<br>具体使用那种算法需要根据自身的业务进行选择,还有其他的算法后面有时间了再进行展示。</p>
 
       
     </div>
@@ -564,14 +564,14 @@
     <div class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\SpringBoot\springboot_resubmit.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot防止重复提交</a></div>
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_configuration.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;SpringBoot配置文件详解</a></div>
       
     </div>
   
     <div class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\SpringBoot\springboot_configuration.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;SpringBoot配置文件详解</a></div>
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_resubmit.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot防止重复提交</a></div>
       
     </div>
   
@@ -633,8 +633,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/SpringBoot/rateLimiter_algorithm.html" rel="next" title="常见的四种限流算法">
-                <i class="fa fa-chevron-left"></i> 常见的四种限流算法
+              <a href="/SpringBoot/springboot_resubmit.html" rel="next" title="Spring boot防止重复提交">
+                <i class="fa fa-chevron-left"></i> Spring boot防止重复提交
               </a>
             
           </div>
@@ -642,6 +642,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/SpringBoot/rateLimiter_algorithm.html" rel="prev" title="常见的四种限流算法">
+                常见的四种限流算法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -967,7 +971,7 @@ function loadPhotos(e) {
     
       <span class="post-meta-item-text">博客全站共&#58;</span>
     
-    <span title="博客全站共">40.1k 字</span>
+    <span title="博客全站共">40.2k 字</span>
   
 </div>
 
@@ -981,7 +985,7 @@ function loadPhotos(e) {
 <!--
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共40.1k字</span>
+  <span class="post-count">博客全站共40.2k字</span>
 </div>
 	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
 -->
