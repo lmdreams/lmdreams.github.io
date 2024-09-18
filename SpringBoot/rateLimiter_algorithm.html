@@ -144,7 +144,7 @@
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_13.png">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_15.png">
 <meta property="og:image" content="http://bolg.lmdream.cn/blog/java/img_14.png">
-<meta property="og:updated_time" content="2024-09-10T06:52:31.575Z">
+<meta property="og:updated_time" content="2024-09-18T02:17:48.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常见的四种限流算法">
 <meta name="twitter:image" content="http://bolg.lmdream.cn/blog/java/img_11.png">
@@ -451,7 +451,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.1k
+                  3.4k
                 </span>
               
 
@@ -467,7 +467,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  12 分钟
+                  13 分钟
                 </span>
               
             </div>
@@ -609,6 +609,14 @@
 </blockquote>
 <hr>
 <p>此次以上就是限流的四种算法,具体使用那种算法需要根据自身的业务进行选择,如果是分布式的话推荐使用redis+Lua脚本来实现市面上也有其他的限流工具，<br>如:基于令牌桶实现的限流组件Guava,基于滑动窗口实现的分布式服务架构的流量控制框架Sentinel。</p>
+<h1 id="Lua脚本"><a href="#Lua脚本" class="headerlink" title="Lua脚本"></a>Lua脚本</h1><h2 id="令牌算法的脚本"><a href="#令牌算法的脚本" class="headerlink" title="令牌算法的脚本"></a>令牌算法的脚本</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 令牌总数</span></span><br><span class="line"><span class="keyword">local</span> capacity = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="comment">-- 令牌产生是速率(**个个数/秒)</span></span><br><span class="line"><span class="keyword">local</span> rate = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="comment">-- 访问时间</span></span><br><span class="line"><span class="keyword">local</span> lastTime = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"><span class="comment">-- 剩余的令牌数量</span></span><br><span class="line"><span class="keyword">local</span> residueTokenNum= <span class="number">0</span></span><br><span class="line"><span class="comment">-- 令牌桶的过期时间(即key的过期时间)</span></span><br><span class="line"><span class="keyword">local</span> resetToken = <span class="built_in">tonumber</span>(ARGV[<span class="number">4</span>])</span><br><span class="line"><span class="comment">-- 消耗的数量</span></span><br><span class="line"><span class="keyword">local</span> consume=<span class="number">1</span></span><br><span class="line"><span class="comment">-- 获得桶令牌数据</span></span><br><span class="line"><span class="keyword">local</span> token = redis.call(<span class="string">'hgetall'</span>, KEYS[<span class="number">1</span>])</span><br><span class="line"><span class="comment">-- 当前桶未初始化,则进行初始化令牌桶</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">table</span>.<span class="built_in">maxn</span>(token) == <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line"><span class="comment">-- 每次消耗一个令牌</span></span><br><span class="line"><span class="keyword">local</span> residueTokenNum= <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>]) - consume</span><br><span class="line"><span class="comment">-- 将初始化的数据存入</span></span><br><span class="line">redis.call(<span class="string">'HMSET'</span>, KEYS[<span class="number">1</span>], <span class="string">'capacity'</span>, capacity, <span class="string">'rate'</span>, rate,  <span class="string">'lastTime'</span>, lastTime,<span class="string">'residueTokenNum'</span>, residueTokenNum)</span><br><span class="line"><span class="comment">-- 设置过期时间</span></span><br><span class="line">redis.call(<span class="string">'pexpire'</span>,  KEYS[<span class="number">1</span>], <span class="built_in">tonumber</span>(ARGV[<span class="number">4</span>]))</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"><span class="comment">-- 获得已经存入的数据</span></span><br><span class="line"><span class="keyword">local</span> bucket = redis.call(<span class="string">'HMGET'</span>, KEYS[<span class="number">1</span>], <span class="string">'capacity'</span>, <span class="string">'rate'</span>, <span class="string">'lastTime'</span>,<span class="string">'residueTokenNum'</span>)</span><br><span class="line"></span><br><span class="line">capacity = bucket[<span class="number">1</span>]</span><br><span class="line">rate =bucket[<span class="number">2</span>]</span><br><span class="line">lastTime = bucket[<span class="number">3</span>]</span><br><span class="line">residueTokenNum= bucket[<span class="number">4</span>]</span><br><span class="line"><span class="comment">-- 传入的时间数据</span></span><br><span class="line"><span class="keyword">local</span> nowTime = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"><span class="comment">-- 生成的令牌数</span></span><br><span class="line"><span class="keyword">local</span> generateTokenNum = <span class="built_in">tonumber</span>(((nowTime - lastTime)/<span class="number">1000</span>)* rate)</span><br><span class="line"><span class="comment">-- 总剩余数量=生成数量+原剩余的数量</span></span><br><span class="line">residueTokenNum = generateTokenNum + residueTokenNum</span><br><span class="line"><span class="comment">--  (桶的限制数量,总生成的数量) =&gt; 超出桶最大令牌数量则进行丢弃</span></span><br><span class="line">residueTokenNum = <span class="built_in">math</span>.<span class="built_in">min</span>(capacity, residueTokenNum)</span><br><span class="line"><span class="comment">-- 剩余的总数量大于等于消耗的数量</span></span><br><span class="line"><span class="keyword">if</span> residueTokenNum &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line"><span class="comment">-- 剩余的数量=剩余的总数量-去消耗的令牌数量</span></span><br><span class="line">residueTokenNum = residueTokenNum - consume</span><br><span class="line"><span class="comment">-- 重置参数</span></span><br><span class="line">redis.call(<span class="string">'HMSET'</span>, KEYS[<span class="number">1</span>], <span class="string">'capacity'</span>, capacity, <span class="string">'rate'</span>, rate, <span class="string">'lastTime'</span>, nowTime,<span class="string">'residueTokenNum'</span>, residueTokenNum)</span><br><span class="line"><span class="comment">-- 返回剩余的数量</span></span><br><span class="line"><span class="keyword">return</span> residueTokenNum</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
 
       
     </div>
@@ -637,7 +645,7 @@
     <div class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\SpringBoot\springboot_rateLimiter.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot限流</a></div>
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_configuration.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;SpringBoot配置文件详解</a></div>
       
     </div>
   
@@ -651,7 +659,7 @@
     <div class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\SpringBoot\springboot_configuration.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;SpringBoot配置文件详解</a></div>
+      <div class="popular-posts-title"><a href="\SpringBoot\springboot_rateLimiter.html" rel="bookmark">🏷️&nbsp;&nbsp;&nbsp;&nbsp;Spring boot限流</a></div>
       
     </div>
   
@@ -706,8 +714,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/SpringBoot/springboot_rateLimiter.html" rel="next" title="Spring boot限流">
-                <i class="fa fa-chevron-left"></i> Spring boot限流
+              <a href="/SpringBoot/springboot_resubmit.html" rel="next" title="Spring boot防止重复提交">
+                <i class="fa fa-chevron-left"></i> Spring boot防止重复提交
               </a>
             
           </div>
@@ -715,6 +723,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/SpringBoot/springboot_rateLimiter.html" rel="prev" title="Spring boot限流">
+                Spring boot限流 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -865,7 +877,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#限流的方式"><span class="nav-number">1.</span> <span class="nav-text">限流的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-固定窗口算法-计数器"><span class="nav-number">1.1.</span> <span class="nav-text">1.固定窗口算法(计数器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#固定窗口算法代码"><span class="nav-number">1.1.1.</span> <span class="nav-text">固定窗口算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-滑动窗口算法"><span class="nav-number">1.2.</span> <span class="nav-text">2.滑动窗口算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动窗口算法代码"><span class="nav-number">1.2.1.</span> <span class="nav-text">滑动窗口算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-漏桶算法"><span class="nav-number">1.3.</span> <span class="nav-text">3.漏桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏桶算法代码"><span class="nav-number">1.3.1.</span> <span class="nav-text">漏桶算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-令牌桶算法"><span class="nav-number">1.4.</span> <span class="nav-text">4.令牌桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#令牌桶算法代码"><span class="nav-number">1.4.1.</span> <span class="nav-text">令牌桶算法代码:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#公共的参数"><span class="nav-number">2.</span> <span class="nav-text">公共的参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiterAspect-java"><span class="nav-number">2.1.</span> <span class="nav-text">RateLimiterAspect.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiterData-java"><span class="nav-number">2.2.</span> <span class="nav-text">RateLimiterData.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiter-java"><span class="nav-number">2.3.</span> <span class="nav-text">RateLimiter.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束"><span class="nav-number">3.</span> <span class="nav-text">结束</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#限流的方式"><span class="nav-number">1.</span> <span class="nav-text">限流的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-固定窗口算法-计数器"><span class="nav-number">1.1.</span> <span class="nav-text">1.固定窗口算法(计数器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#固定窗口算法代码"><span class="nav-number">1.1.1.</span> <span class="nav-text">固定窗口算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-滑动窗口算法"><span class="nav-number">1.2.</span> <span class="nav-text">2.滑动窗口算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动窗口算法代码"><span class="nav-number">1.2.1.</span> <span class="nav-text">滑动窗口算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-漏桶算法"><span class="nav-number">1.3.</span> <span class="nav-text">3.漏桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏桶算法代码"><span class="nav-number">1.3.1.</span> <span class="nav-text">漏桶算法代码:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-令牌桶算法"><span class="nav-number">1.4.</span> <span class="nav-text">4.令牌桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#令牌桶算法代码"><span class="nav-number">1.4.1.</span> <span class="nav-text">令牌桶算法代码:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#公共的参数"><span class="nav-number">2.</span> <span class="nav-text">公共的参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiterAspect-java"><span class="nav-number">2.1.</span> <span class="nav-text">RateLimiterAspect.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiterData-java"><span class="nav-number">2.2.</span> <span class="nav-text">RateLimiterData.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RateLimiter-java"><span class="nav-number">2.3.</span> <span class="nav-text">RateLimiter.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束"><span class="nav-number">3.</span> <span class="nav-text">结束</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lua脚本"><span class="nav-number">4.</span> <span class="nav-text">Lua脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#令牌算法的脚本"><span class="nav-number">4.1.</span> <span class="nav-text">令牌算法的脚本</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1040,7 +1052,7 @@ function loadPhotos(e) {
     
       <span class="post-meta-item-text">博客全站共&#58;</span>
     
-    <span title="博客全站共">40.2k 字</span>
+    <span title="博客全站共">40.5k 字</span>
   
 </div>
 
@@ -1054,7 +1066,7 @@ function loadPhotos(e) {
 <!--
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共40.2k字</span>
+  <span class="post-count">博客全站共40.5k字</span>
 </div>
 	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=你自己的备案号" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">赣公网安备 你自己的备案号</a>	  这里将图标作为了背景，以使得能和后面的文字在同一行
 -->
